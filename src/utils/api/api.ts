@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-export async function getSingleProduct({id} : {id:string}) {
+export async function getSingleProduct({ id }: { id: string }) {
   const url = `https://dummyjson.com/products/${id}`;
   try {
     const response = await fetch(url);
@@ -35,14 +35,25 @@ export async function getCategories() {
   }
 }
 
-export async function getProducts(category?:string | null) {
+export async function getProducts({
+  category,
+  sortBy,
+  orderBy,
+}: {
+  category?: string | null;
+  sortBy?: string | null;
+  orderBy?: string | null;
+}) {
+  const selectedCategory = category || null;
+  const sort = sortBy || "rating";
+  const order = orderBy || "desc";
 
-  const selectedCategory = category;
-
-  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}`;
-  const allProductsurl = "https://dummyjson.com/products?limit=30";
+  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}?sortBy=${sort}&order=${order}`;
+  const allProductsurl = `https://dummyjson.com/products?limit=30&sortBy=${sort}&order=${order}`;
   try {
-    const response = await fetch(selectedCategory == null ? allProductsurl : catagoryProductsurl);
+    const response = await fetch(
+      selectedCategory == null ? allProductsurl : catagoryProductsurl
+    );
 
     if (!response.ok) {
       const errorData = await response.json();

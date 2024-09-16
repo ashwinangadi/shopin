@@ -10,7 +10,7 @@ export default function Home() {
 
   queryClient.prefetchQuery({
     queryKey: ["products", null],
-    queryFn: () => getProducts(),
+    queryFn: () => getProducts({}),
   });
 
   return (
