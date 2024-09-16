@@ -7,69 +7,39 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
+import SortOrder from "./SortOrder";
 
 const Products = () => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy");
-  const orderBy = searchParams.get("order");
+  const sortBy = searchParams.get("sortBy") || "title";
+  const orderBy = searchParams.get("order") || "asc";
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["products", selectedCategory, sortBy, orderBy],
     queryFn: () => getProducts({ category: selectedCategory, sortBy, orderBy }),
   });
 
-  const sorts = [
-    {
-      name: "A-Z",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "title", order: "asc" }))}`,
-    },
-    {
-      name: "Z-A",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "title", order: "desc" }))}`,
-    },
-    {
-      name: "Price: Low to High",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "price", order: "asc" }))}`,
-    },
-    {
-      name: "Price: High to Low",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "price", order: "desc" }))}`,
-    },
-    {
-      name: "Rating: Low to High",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "rating", order: "asc" }))}`,
-    },
-    {
-      name: "Rating: High to Low",
-      value: `?${new URLSearchParams(urlParam({ category: selectedCategory, sort: "rating", order: "desc" }))}`,
-    },
-  ];
-
   return (
-    <section className=" w-full container mx-auto py-10 space-y-4 ">
-      <div className="flex justify-between items-center border rounded-md p-2 shadow-sm">
-        <span className="flex items-center gap-2 ">
-          {data?.total} results for{" "}
-          <p className=" capitalize">
-            &quot;
-            {selectedCategory === null ? "All products" : selectedCategory.split("-").join(" ")}
-            &quot;
+    <section className=" w-full container mx-auto pb-10 space-y-4 ">
+      <div className="flex justify-between items-center border-b p-2">
+        <span className="flex items-center gap-1 text-xs md:text-sm">
+          <p>{data?.total} results </p>
+          <p className="flex gap-1">
+            for
+            <span className="capitalize text-orange-700">
+              &quot;
+              {selectedCategory === null
+                ? "All products"
+                : selectedCategory.split("-").join(" ")}
+              &quot;
+            </span>
           </p>
         </span>
-        <span className="flex items-center gap-2 ">
-          <p>Sort:</p>
-          {sorts.map((item) => {
-            return (
-              <Link
-                href={item.value}
-                className="text-black hover:text-blue-500"
-                key={item.name}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </span>
+        <SortOrder
+          selectedCategory={selectedCategory}
+          sortBy={sortBy}
+          orderBy={orderBy}
+        />
       </div>
       <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-full gap-10">
         {!isLoading ? (
