@@ -48,7 +48,7 @@ const SortOrder = ({
     },
   ];
   return (
-    <span className="flex items-center gap-2 ">
+    <span className="flex justify-end items-center gap-2 ">
       <Select
         value={`?${new URLSearchParams(urlParam({ category: selectedCategory, sort: sortBy, order: orderBy }))}`}
         // defaultValue={sorts[0].value}

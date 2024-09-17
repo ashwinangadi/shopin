@@ -47,8 +47,8 @@ export async function getProducts({
   category?: string | null;
   sortBy?: string | null;
   orderBy?: string | null;
-  limit?: string | null;
-  skip?: string | null;
+  limit?: number | null;
+  skip?: number | null;
 }) {
   const selectedCategory = category || null;
   const sort = sortBy || "title";
