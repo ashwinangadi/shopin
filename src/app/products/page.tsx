@@ -1,5 +1,4 @@
-
-import Products from "@/components/products/Products";
+import ProductsPage from "@/components/products/ProductsPage";
 import { getQueryClient } from "@/providers/get-query-client";
 import { getProducts } from "@/utils/api/api";
 
@@ -17,7 +16,7 @@ export default function Home() {
     <main className="flex min-h-screen w-full mx-auto flex-col ">
       <HydrationBoundary state={dehydrate(queryClient)}>
         {/* <p className="">Page.tsx</p> */}
-        <Products />
+        <ProductsPage />
       </HydrationBoundary>
     </main>
   );

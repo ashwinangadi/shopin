@@ -61,7 +61,6 @@ export async function getProducts({
   const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}${options}`;
   const allProductsurl = `https://dummyjson.com/products${options}`;
 
-  console.log("api triggered", skip);
   try {
     const response = await fetch(
       selectedCategory == null ? allProductsurl : catagoryProductsurl
