@@ -8,17 +8,20 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import SortOrder from "./SortOrder";
+import PaginationProduct from "./ProductsPagination";
 
 const Products = () => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy") || "title";
-  const orderBy = searchParams.get("order") || "asc";
+  const sortBy = searchParams.get("sortBy") || "title";;
+  const orderBy = searchParams.get("order") || "asc";;
+  const limit = searchParams.get("limit");
+  const skip = searchParams.get("skip");
   const { data, isError, error, isLoading } = useQuery({
-    queryKey: ["products", selectedCategory, sortBy, orderBy],
-    queryFn: () => getProducts({ category: selectedCategory, sortBy, orderBy }),
+    queryKey: ["products", selectedCategory, sortBy, orderBy, skip],
+    queryFn: () =>
+      getProducts({ category: selectedCategory, sortBy, orderBy, limit, skip }),
   });
-
   return (
     <section className=" w-full container mx-auto pb-10 space-y-4 ">
       <div className="flex justify-between items-center border-b p-2">
@@ -41,7 +44,7 @@ const Products = () => {
           orderBy={orderBy}
         />
       </div>
-      <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-full gap-10">
+      <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-full gap-10">
         {!isLoading ? (
           !isError ? (
             data?.total > 0 ? (
@@ -133,6 +136,7 @@ const Products = () => {
           </div>
         )}
       </div>
+      <PaginationProduct totalProduct={data?.total} />
     </section>
   );
 };

@@ -39,17 +39,27 @@ export async function getProducts({
   category,
   sortBy,
   orderBy,
+  limit,
+  skip,
 }: {
   category?: string | null;
   sortBy?: string | null;
   orderBy?: string | null;
+  limit?: string | null;
+  skip?: string | null;
 }) {
   const selectedCategory = category || null;
-  const sort = sortBy || "rating";
-  const order = orderBy || "desc";
+  const sort = sortBy || "title";
+  const order = orderBy || "asc";
+  const setLimit = limit || 30;
+  const setSkip = skip || 0;
 
-  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}?sortBy=${sort}&order=${order}`;
-  const allProductsurl = `https://dummyjson.com/products?limit=30&sortBy=${sort}&order=${order}`;
+  const options = `?limit=${setLimit}&skip=${setSkip}&sortBy=${sort}&order=${order}`;
+
+  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}${options}`;
+  const allProductsurl = `https://dummyjson.com/products${options}`;
+
+  console.log("api triggered", skip)
   try {
     const response = await fetch(
       selectedCategory == null ? allProductsurl : catagoryProductsurl
