@@ -1,33 +1,28 @@
 import React from "react";
 import { Button } from "../ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
 import CategoriesList from "../catagories-list/CategoriesList";
-import { getQueryClient } from "@/providers/get-query-client";
-import { categoryListOptions } from "@/utils/api/api";
+import Search from "../search/Search";
+import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
-  //   const queryClient = getQueryClient();
-
-  //   queryClient.prefetchQuery(categoryListOptions);
   return (
-    <section className="flex items-center justify-between h-16 bg-[#0f1111] text-white px-4">
-      <div className="flex gap-2">
-        <CategoriesList />
-        <p className="text-2xl font-extrabold">ShopIN</p>
+    <section className=" flex flex-col md:flex-row gap-1 items-center w-full h-20 md:h-16 bg-[#0f1111] text-white px-1 md:px-4">
+      <div className="flex items-center justify-between w-full">
+        <div className="flex gap-2">
+          <CategoriesList />
+          <p className="text-2xl font-extrabold">ShopIN</p>
+        </div>
+        <span className="hidden md:block w-full max-w-5xl">
+          <Search placeholder="Search" />
+        </span>
+        {/* <p className="text-2xl ">SearchBar</p> */}
+        <div className="flex items-center gap-3">
+          <Button variant={"secondary"}>Login</Button>
+          <ShoppingCart className="h-8 w-8" />
+        </div>
       </div>
-      <p className="text-2xl ">SearchBar</p>
-      <div className="flex gap-2">
-        <Button variant={"ghost"}>Login</Button>
-        <p className="text-2xl ">Cart</p>
+      <div className="w-full md:hidden">
+        <Search placeholder="Search" />
       </div>
     </section>
   );

@@ -43,12 +43,14 @@ export async function getProducts({
   orderBy,
   limit,
   skip,
+  searchQuery,
 }: {
   category?: string | null;
   sortBy?: string | null;
   orderBy?: string | null;
   limit?: number | null;
   skip?: number | null;
+  searchQuery?: string | null;
 }) {
   const selectedCategory = category || null;
   const sort = sortBy || "title";
@@ -56,14 +58,19 @@ export async function getProducts({
   const setLimit = limit || LIMIT;
   const setSkip = skip || 0;
 
-  const options = `?limit=${setLimit}&skip=${setSkip}&sortBy=${sort}&order=${order}`;
+  const options = `limit=${setLimit}&skip=${setSkip}&sortBy=${sort}&order=${order}`;
 
-  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}${options}`;
-  const allProductsurl = `https://dummyjson.com/products${options}`;
-
+  const searchProducts = `https://dummyjson.com/products/search?q=${searchQuery}&${options}`;
+  const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}?${options}`;
+  const allProductsurl = `https://dummyjson.com/products?${options}`;
+  
   try {
     const response = await fetch(
-      selectedCategory == null ? allProductsurl : catagoryProductsurl
+      selectedCategory !== null
+        ? catagoryProductsurl
+        : searchQuery
+          ? searchProducts
+          : allProductsurl
     );
 
     if (!response.ok) {

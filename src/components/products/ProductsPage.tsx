@@ -13,33 +13,51 @@ const ProductsPage = () => {
   const selectedCategory = searchParams.get("category");
   const sortBy = searchParams.get("sortBy") || "title";
   const orderBy = searchParams.get("order") || "asc";
+  const searchQuery = searchParams.get("query");
   const limit = Number(searchParams.get("limit")) || LIMIT;
   const skip = Number(searchParams.get("skip")) || 0;
   const { data, isError, error, isLoading } = useQuery({
-    queryKey: ["products", selectedCategory, sortBy, orderBy, skip],
+    queryKey: [
+      "products",
+      selectedCategory,
+      sortBy,
+      orderBy,
+      skip,
+      searchQuery,
+    ],
     queryFn: () =>
-      getProducts({ category: selectedCategory, sortBy, orderBy, limit, skip }),
+      getProducts({
+        category: selectedCategory,
+        sortBy,
+        orderBy,
+        limit,
+        skip,
+        searchQuery,
+      }),
   });
   return (
     <section className=" w-full container mx-auto pb-10 space-y-4 ">
-      <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center border-b p-2">
-        <span className="flex items-center gap-1 text-xs md:text-sm">
+      <div className="flex justify-between items-center border-b p-2">
+        <div className="flex flex-col sm:flex-row items-center gap-1 text-xs md:text-sm">
           <p>
-            {skip + 1} -{" "}
+            {skip + 1} -
             {skip + limit > data?.total ? data?.total : skip + limit} of{" "}
             {data?.total} results{" "}
           </p>
+
           <p className="flex gap-1">
             for
             <span className="capitalize text-orange-700">
               &quot;
-              {selectedCategory === null
-                ? "All products"
-                : selectedCategory.split("-").join(" ")}
+              {selectedCategory !== null
+                ? selectedCategory.split("-").join(" ")
+                : searchQuery
+                  ? searchQuery
+                  : "All Products"}
               &quot;
             </span>
           </p>
-        </span>
+        </div>
         <SortOrder
           selectedCategory={selectedCategory}
           sortBy={sortBy}
