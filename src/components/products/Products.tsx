@@ -13,8 +13,8 @@ import PaginationProduct from "./ProductsPagination";
 const Products = () => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy") || "title";;
-  const orderBy = searchParams.get("order") || "asc";;
+  const sortBy = searchParams.get("sortBy") || "title";
+  const orderBy = searchParams.get("order") || "asc";
   const limit = searchParams.get("limit");
   const skip = searchParams.get("skip");
   const { data, isError, error, isLoading } = useQuery({
@@ -136,7 +136,7 @@ const Products = () => {
           </div>
         )}
       </div>
-      <PaginationProduct totalProduct={data?.total} />
+      {data?.total > 20 && <PaginationProduct totalProduct={data?.total} />}
     </section>
   );
 };

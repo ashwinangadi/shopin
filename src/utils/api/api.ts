@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
+export const LIMIT = 20;
+
 export async function getSingleProduct({ id }: { id: string }) {
   const url = `https://dummyjson.com/products/${id}`;
   try {
@@ -51,7 +53,7 @@ export async function getProducts({
   const selectedCategory = category || null;
   const sort = sortBy || "title";
   const order = orderBy || "asc";
-  const setLimit = limit || 30;
+  const setLimit = limit || LIMIT;
   const setSkip = skip || 0;
 
   const options = `?limit=${setLimit}&skip=${setSkip}&sortBy=${sort}&order=${order}`;
@@ -59,7 +61,7 @@ export async function getProducts({
   const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}${options}`;
   const allProductsurl = `https://dummyjson.com/products${options}`;
 
-  console.log("api triggered", skip)
+  console.log("api triggered", skip);
   try {
     const response = await fetch(
       selectedCategory == null ? allProductsurl : catagoryProductsurl
