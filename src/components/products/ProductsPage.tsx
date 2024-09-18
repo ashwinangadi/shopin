@@ -7,6 +7,21 @@ import React from "react";
 import SortOrder from "./SortOrder";
 import PaginationProduct from "./ProductsPagination";
 import ProductCard from "./ProductCard";
+import Filter from "./Filter";
+import ProductCount from "./ProductCount";
+import { Button } from "../ui/button";
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import ProductsPagination from "./ProductsPagination";
 
 const ProductsPage = () => {
   const searchParams = useSearchParams();
@@ -36,70 +51,99 @@ const ProductsPage = () => {
       }),
   });
   return (
-    <section className=" w-full container mx-auto pb-10 space-y-4 ">
-      <div className="flex justify-between items-center border-b p-2">
-        <div className="flex flex-col sm:flex-row items-center gap-1 text-xs md:text-sm">
-          <p>
-            {skip + 1} -
-            {skip + limit > data?.total ? data?.total : skip + limit} of{" "}
-            {data?.total} results{" "}
-          </p>
-
-          <p className="flex gap-1">
-            for
-            <span className="capitalize text-orange-700">
-              &quot;
-              {selectedCategory !== null
-                ? selectedCategory.split("-").join(" ")
-                : searchQuery
-                  ? searchQuery
-                  : "All Products"}
-              &quot;
-            </span>
-          </p>
-        </div>
-        <SortOrder
-          selectedCategory={selectedCategory}
-          sortBy={sortBy}
-          orderBy={orderBy}
-        />
-      </div>
-      <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-full gap-10">
-        {!isLoading ? (
-          !isError ? (
-            data?.total > 0 ? (
-              data?.products.map((item: any) => {
-                return (
-                  <ProductCard
-                    key={item.id}
-                    id={item.id}
-                    thumbnail={item.thumbnail}
-                    title={item.title}
-                    brand={item.brand}
-                    rating={item.rating}
-                    price={item.price}
-                    discountPercentage={item.discountPercentage}
-                    shippingInformation={item.shippingInformation}
-                    returnPolicy={item.returnPolicy}
-                  />
-                );
-              })
-            ) : (
-              <p className="col-span-full text-center h-[50vh] flex gap-2 items-center justify-center">
-                Catagory does not exist! Select from{" "}
-                <span className="font-bold">Catagory menu</span>{" "}
-              </p>
-            )
-          ) : (
-            <p>{error.message}</p>
-          )
-        ) : (
-          <div className="col-span-full flex items-center h-[50vh] justify-center w-full">
-            <Loader className="w-20 h-20 animate-spin" />
+    <section className="grid md:grid-cols-[200px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
+      <span className="hidden md:block">
+        <Filter data={data} />
+      </span>
+      <div className="flex-1 space-y-1 mt-2">
+        <div className="flex justify-between items-center bg-white border rounded-md p-2">
+          <div className="md:hidden">
+            <Drawer>
+              <DrawerTrigger>
+                {/* <Button variant={"outline"}>Filter</Button> */}
+                Filter
+              </DrawerTrigger>
+              <DrawerContent>
+                <Filter data={data} />
+                {/* <DrawerHeader>
+                  <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                  <DrawerDescription>
+                    This action cannot be undone.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <DrawerFooter>
+                  <Button>Submit</Button>
+                  <DrawerClose>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter> */}
+              </DrawerContent>
+            </Drawer>
           </div>
-        )}
+          <span className="hidden md:block ">
+            <ProductCount
+              skip={skip}
+              limit={limit}
+              data={data}
+              selectedCategory={selectedCategory}
+              searchQuery={searchQuery}
+            />
+          </span>
+          <SortOrder
+            selectedCategory={selectedCategory}
+            sortBy={sortBy}
+            orderBy={orderBy}
+          />
+        </div>
+        <div className="bg-white p-1.5 border rounded-md">
+          <span className="md:hidden">
+            <ProductCount
+              skip={skip}
+              limit={limit}
+              data={data}
+              selectedCategory={selectedCategory}
+              searchQuery={searchQuery}
+            />
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-6 ">
+            {!isLoading ? (
+              !isError ? (
+                data?.total > 0 ? (
+                  data?.products.map((item: any) => {
+                    return (
+                      <ProductCard
+                        key={item.id}
+                        id={item.id}
+                        thumbnail={item.thumbnail}
+                        title={item.title}
+                        brand={item.brand}
+                        rating={item.rating}
+                        price={item.price}
+                        discountPercentage={item.discountPercentage}
+                        shippingInformation={item.shippingInformation}
+                        returnPolicy={item.returnPolicy}
+                      />
+                    );
+                  })
+                ) : (
+                  <p className="col-span-full text-center h-[50vh] flex gap-2 items-center justify-center">
+                    Catagory does not exist! Select from{" "}
+                    <span className="font-bold">Catagory menu</span>{" "}
+                  </p>
+                )
+              ) : (
+                <p>{error.message}</p>
+              )
+            ) : (
+              <div className="col-span-full flex items-center h-[50vh] justify-center w-full">
+                <Loader className="w-20 h-20 animate-spin" />
+              </div>
+            )}
+          </div>
+        {data?.total > 20 && <ProductsPagination totalProduct={data?.total} />}
+        </div>
+
       </div>
-      {data?.total > 20 && <PaginationProduct totalProduct={data?.total} />}
     </section>
   );
 };
