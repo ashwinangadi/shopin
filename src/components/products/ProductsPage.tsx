@@ -59,24 +59,11 @@ const ProductsPage = () => {
         <div className="flex justify-between items-center bg-white border rounded-md p-2">
           <div className="md:hidden">
             <Drawer>
-              <DrawerTrigger>
-                {/* <Button variant={"outline"}>Filter</Button> */}
+              <DrawerTrigger className="border border-input bg-background shadow-sm p-2 px-4 hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
                 Filter
               </DrawerTrigger>
               <DrawerContent>
                 <Filter data={data} />
-                {/* <DrawerHeader>
-                  <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                  <DrawerDescription>
-                    This action cannot be undone.
-                  </DrawerDescription>
-                </DrawerHeader>
-                <DrawerFooter>
-                  <Button>Submit</Button>
-                  <DrawerClose>
-                    <Button variant="outline">Cancel</Button>
-                  </DrawerClose>
-                </DrawerFooter> */}
               </DrawerContent>
             </Drawer>
           </div>
@@ -140,9 +127,10 @@ const ProductsPage = () => {
               </div>
             )}
           </div>
-        {data?.total > 20 && <ProductsPagination totalProduct={data?.total} />}
+          {data?.total > 20 && (
+            <ProductsPagination totalProduct={data?.total} />
+          )}
         </div>
-
       </div>
     </section>
   );

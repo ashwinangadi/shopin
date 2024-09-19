@@ -37,12 +37,12 @@ const ProductCard = ({
           <p className="text-sm">({Math.floor(Math.random() * 500)})</p>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-end gap-2">
           <span className="flex items-start justify-start gap-1 ">
             <p className="text-sm leading-none">$</p>
             <p className="text-2xl font-semibold leading-none">{price}</p>
           </span>
-          <div className="">
+          <div className="flex gap-2 h-full">
             <span className="flex gap-1">
               <p className="text-xs text-gray-500 leading-none pb-0.5">
                 M.R.P:
