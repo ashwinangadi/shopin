@@ -1,6 +1,4 @@
-import { useSearchParams } from "next/navigation";
 import React from "react";
-import { Input } from "../ui/input";
 
 import {
   Accordion,
@@ -11,10 +9,6 @@ import {
 import FilterCard from "./FilterCard";
 
 const Filter = (data: any) => {
-  const searchParams = useSearchParams();
-
-  const urlParams = new URLSearchParams(searchParams.toString());
-
   const filteredBrands = new Set(
     data?.data?.products?.map((item: any) => item.brand)
   );
@@ -85,7 +79,7 @@ const Filter = (data: any) => {
                   key={item}
                   item={item}
                   queryName="availability"
-                //   description=" % or more"
+                  //   description=" % or more"
                   itemType="text"
                 />
               );

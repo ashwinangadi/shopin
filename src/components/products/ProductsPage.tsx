@@ -5,22 +5,10 @@ import { Loader } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import SortOrder from "./SortOrder";
-import PaginationProduct from "./ProductsPagination";
 import ProductCard from "./ProductCard";
 import Filter from "./Filter";
 import ProductCount from "./ProductCount";
-import { Button } from "../ui/button";
-
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import ProductsPagination from "./ProductsPagination";
 
 const ProductsPage = () => {
@@ -51,7 +39,7 @@ const ProductsPage = () => {
       }),
   });
   return (
-    <section className="grid md:grid-cols-[250px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
+    <section className="grid md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
       <span className="hidden md:block">
         <Filter data={data} />
       </span>
@@ -82,7 +70,7 @@ const ProductsPage = () => {
             orderBy={orderBy}
           />
         </div>
-        <div className="bg-white p-1.5 border rounded-md">
+        <div className="bg-white p-1.5 min-h-[calc(100vh-140px)] border rounded-md">
           <span className="md:hidden">
             <ProductCount
               skip={skip}
@@ -119,7 +107,7 @@ const ProductsPage = () => {
                   </p>
                 )
               ) : (
-                <p>{error.message}</p>
+                <p className="col-span-full flex items-center h-[50vh] justify-center w-full">{"asdf"}</p>
               )
             ) : (
               <div className="col-span-full flex items-center h-[50vh] justify-center w-full">

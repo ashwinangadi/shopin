@@ -42,7 +42,7 @@ const ProductCard = ({
             <p className="text-sm leading-none">$</p>
             <p className="text-2xl font-semibold leading-none">{price}</p>
           </span>
-          <div className="flex gap-2 h-full">
+          <div className="flex gap-2 md:gap-0 md:flex-col xl:flex-row xl:gap-2 h-full">
             <span className="flex gap-1">
               <p className="text-xs text-gray-500 leading-none pb-0.5">
                 M.R.P:

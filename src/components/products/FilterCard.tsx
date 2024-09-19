@@ -1,6 +1,7 @@
 import React from "react";
 import { Input } from "../ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Checkbox } from "../ui/checkbox";
 
 type FilterCardProps = {
   item: string;
@@ -23,7 +24,7 @@ const FilterCard = ({
   const updateParams = (
     queryName: string,
     paramName: string,
-    checked: boolean
+    checked: string | boolean
   ) => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -54,24 +55,23 @@ const FilterCard = ({
     }
   }
 
-  const param = itemType === "text" ? itemName.split(" ").join("_").toLowerCase() : item;
+  const param =
+    itemType === "text" ? itemName.split(" ").join("_").toLowerCase() : item;
 
   return (
     <div key={item} className="flex items-center font-light gap-2 text-sm">
-      <Input
-        type="checkbox"
-        name={queryName + "Checkbox"}
+      <Checkbox
+        id={param}
         checked={urlParams.getAll(queryName).includes(param)}
-        onChange={(e) => updateParams(param, queryName, e.target.checked)}
-        className="w-4 h-4"
+        onCheckedChange={(checked) => updateParams(param, queryName, checked)}
       />
-      <p>
+      <label htmlFor={param}>
         {itemName}
         {queryName === "rating" && (
           <span className="text-orange-500"> &#9733;</span>
         )}
         {description}
-      </p>
+      </label>
     </div>
   );
 };
