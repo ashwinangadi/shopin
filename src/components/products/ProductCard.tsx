@@ -14,12 +14,12 @@ const ProductCard = ({
   returnPolicy,
 }: any) => {
   return (
-    <div key={id} className="border rounded-md space-y-4 hover:shadow-lg">
+    <div key={id} className=" space-y-4 hover:shadow-lg">
       <Image
         src={thumbnail}
         alt=""
-        width={250}
-        height={250}
+        width={200}
+        height={200}
         className="mx-auto"
       />
       <div className="p-3 space-y-2">
@@ -37,23 +37,27 @@ const ProductCard = ({
           <p className="text-sm">({Math.floor(Math.random() * 500)})</p>
         </div>
 
-        <div className="flex items-end gap-2">
+        <div className="flex items-center justify-between gap-2">
           <span className="flex items-start justify-start gap-1 ">
             <p className="text-sm leading-none">$</p>
             <p className="text-2xl font-semibold leading-none">{price}</p>
           </span>
-          <span className="flex gap-1">
-            <p className="text-xs text-gray-500 leading-none pb-0.5">M.R.P:</p>
-            <p className="text-xs text-gray-500 line-through leading-none pb-0.5">
-              {(
-                parseFloat(price) +
-                parseFloat(price) * (parseFloat(discountPercentage) / 100)
-              ).toFixed(2)}
+          <div className="">
+            <span className="flex gap-1">
+              <p className="text-xs text-gray-500 leading-none pb-0.5">
+                M.R.P:
+              </p>
+              <p className="text-xs text-gray-500 line-through leading-none pb-0.5">
+                {(
+                  parseFloat(price) +
+                  parseFloat(price) * (parseFloat(discountPercentage) / 100)
+                ).toFixed(2)}
+              </p>
+            </span>
+            <p className="text-xs leading-none pb-0.5 text-green-700">
+              ({discountPercentage}% off)
             </p>
-          </span>
-          <p className="text-xs leading-none pb-0.5 text-green-700">
-            ({discountPercentage}% off)
-          </p>
+          </div>
         </div>
         <div className="">
           <span className="flex items-center gap-1">

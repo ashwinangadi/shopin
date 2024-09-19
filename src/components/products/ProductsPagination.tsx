@@ -61,7 +61,7 @@ const ProductsPagination = ({ totalProduct }: { totalProduct: number }) => {
   };
 
   return (
-    <Pagination>
+    <Pagination className=" mt-10 mb-5">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
