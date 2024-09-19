@@ -6,7 +6,7 @@ import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <section className="fixed top-0 flex flex-col md:flex-row gap-1 items-center w-full h-24 md:h-16 bg-orange-500 text-white px-1 md:px-4 z-50">
+    <section className="fixed top-0 flex flex-col md:flex-row gap-1 items-center w-full h-24 md:h-16 bg-primary text-white px-1 md:px-4 z-50">
       <div className="flex items-center justify-between py-2 w-full">
         <div className="flex gap-2">
           <CategoriesList />

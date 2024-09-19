@@ -51,6 +51,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-orange-100 text-foreground;
+    @apply bg-primary/10 text-foreground;
   }
 }

@@ -8,7 +8,7 @@ export default function Home() {
   const queryClient = getQueryClient();
 
   queryClient.prefetchQuery({
-    queryKey: ["products", null],
+    queryKey: ["products", null, "title", "asc", 0, null],
     queryFn: () => getProducts({}),
   });
 
