@@ -18,6 +18,9 @@ const Filter = (data: any) => {
   const filteredBrands = new Set(
     data?.data?.products?.map((item: any) => item.brand)
   );
+  const availability = new Set(
+    data?.data?.products?.map((item: any) => item.availabilityStatus)
+  );
   const ratingArray = ["4", "3", "2", "1"];
   const discountArray = ["15", "10", "5", "1"];
 
@@ -68,6 +71,22 @@ const Filter = (data: any) => {
                   queryName="discount"
                   description=" % or more"
                   itemType="number"
+                />
+              );
+            })}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-4">
+          <AccordionTrigger>Availability</AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            {Array.from(availability).map((item: any) => {
+              return (
+                <FilterCard
+                  key={item}
+                  item={item}
+                  queryName="availability"
+                //   description=" % or more"
+                  itemType="text"
                 />
               );
             })}

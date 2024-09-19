@@ -51,7 +51,7 @@ const ProductsPage = () => {
       }),
   });
   return (
-    <section className="grid md:grid-cols-[200px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
+    <section className="grid md:grid-cols-[250px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
       <span className="hidden md:block">
         <Filter data={data} />
       </span>

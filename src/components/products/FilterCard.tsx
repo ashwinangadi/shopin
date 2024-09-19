@@ -54,7 +54,7 @@ const FilterCard = ({
     }
   }
 
-  const param = itemType === "text" ? itemName.split(" ").join("") : item;
+  const param = itemType === "text" ? itemName.split(" ").join("_").toLowerCase() : item;
 
   return (
     <div key={item} className="flex items-center font-light gap-2 text-sm">
