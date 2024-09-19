@@ -13,7 +13,7 @@ export default function Home() {
   });
 
   return (
-    <main className="flex min-h-screen w-full mx-auto flex-col mt-24 md:mt-16 ">
+    <main className="flex min-h-[calc(100vh-96px)] w-full mx-auto flex-col mt-24 md:mt-16 ">
       <HydrationBoundary state={dehydrate(queryClient)}>
         {/* <p className="">Page.tsx</p> */}
         <ProductsPage />

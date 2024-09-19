@@ -8,23 +8,27 @@ import {
 } from "@/components/ui/accordion";
 import FilterCard from "./FilterCard";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import PriceSlider from "./PriceSlider";
 
 const Filter = (data: any) => {
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const ClearFilter = () => {
+  const handleClearFilter = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("brand");
     params.delete("rating");
     params.delete("discount");
     params.delete("availability");
+    params.delete("priceMin");
+    params.delete("priceMax");
 
     const newURL = `${pathname}?${params.toString()}`;
     replace(newURL);
   };
+
   const filteredBrands = new Set(
     data?.data?.products?.map((item: any) => item.brand)
   );
@@ -39,11 +43,12 @@ const Filter = (data: any) => {
       {/* <div className="fixed top-20 text-xl"> */}
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium">Filter</p>
-        <p className="text-sm text-orange-700" onClick={ClearFilter}>
+        <p className="text-sm text-orange-700" onClick={handleClearFilter}>
           Clear All
         </p>
       </div>
       <hr />
+      <PriceSlider data={data} />
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger>Brands</AccordionTrigger>
@@ -81,7 +86,7 @@ const Filter = (data: any) => {
                   key={item}
                   item={item}
                   queryName="discount"
-                  description=" % or more"
+                  description="% or more"
                   itemType="number"
                 />
               );
