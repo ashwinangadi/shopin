@@ -1,3 +1,4 @@
+import { ProductCardProps } from "@/types";
 import { Truck, UndoDot } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -12,7 +13,7 @@ const ProductCard = ({
   discountPercentage,
   shippingInformation,
   returnPolicy,
-}: any) => {
+}: ProductCardProps) => {
   return (
     <div key={id} className="space-y-4 hover:shadow-lg">
       <Image
@@ -27,7 +28,9 @@ const ProductCard = ({
           <p className="">
             {title.length > 20 ? title.substring(0, 20) + "..." : title}
           </p>
-          <p className="text-xs text-gray-500">{brand ? brand : "Local Business"}</p>
+          <p className="text-xs text-gray-500">
+            {brand ? brand : "Local Business"}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <span className="flex text-xs text-white rounded-sm p-0.5 px-1.5 gap-1 bg-green-700 w-fit">
@@ -48,10 +51,7 @@ const ProductCard = ({
                 M.R.P:
               </p>
               <p className="text-xs text-gray-500 line-through leading-none pb-0.5">
-                {(
-                  parseFloat(price) +
-                  parseFloat(price) * (parseFloat(discountPercentage) / 100)
-                ).toFixed(2)}
+                {(price + price * (discountPercentage / 100)).toFixed(2)}
               </p>
             </span>
             <p className="text-xs leading-none pb-0.5 text-green-700">

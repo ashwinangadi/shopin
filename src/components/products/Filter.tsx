@@ -9,8 +9,9 @@ import {
 import FilterCard from "./FilterCard";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import PriceSlider from "./PriceSlider";
+import { DataList } from "@/types";
 
-const Filter = (data: any) => {
+const Filter = ({ data }: { data: DataList }) => {
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -30,13 +31,13 @@ const Filter = (data: any) => {
   };
 
   const filteredBrands = new Set(
-    data?.data?.products?.map((item: any) => item.brand)
+    data?.products?.map((item: any) => item.brand)
   );
   const availability = new Set(
-    data?.data?.products?.map((item: any) => item.availabilityStatus)
+    data?.products?.map((item: any) => item.availabilityStatus)
   );
   const ratingArray = ["4", "3", "2", "1"];
-  const discountArray = ["15", "10", "5", "1"];
+  const discountArray = ["15", "10", "5"];
 
   return (
     <div className="w-full relative p-2 md:py-3 md:mt-2 md:border rounded-md h-full md:h-[calc(100%-8px)] space-y-4 md:bg-white">

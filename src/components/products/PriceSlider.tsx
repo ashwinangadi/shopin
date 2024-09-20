@@ -1,15 +1,16 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { Slider } from "../ui/slider";
+import { Product, DataList } from "@/types";
 
-const PriceSlider = ({ data }: any) => {
+const PriceSlider = ({ data }: { data: DataList }) => {
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
 
-  const priceRange = data?.data?.products
-    ?.map((item: any) => Number(item.price))
+  const priceRange = data?.products
+    ?.map((item: Product) => Number(item.price))
     .sort((a: any, b: any) => a - b);
 
   const priceRangeMax = priceRange && Math.max(...priceRange);
