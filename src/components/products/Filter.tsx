@@ -43,7 +43,10 @@ const Filter = (data: any) => {
       {/* <div className="fixed top-20 text-xl"> */}
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium">Filter</p>
-        <p className="text-sm text-orange-700" onClick={handleClearFilter}>
+        <p
+          className="text-sm text-orange-700 cursor-pointer"
+          onClick={handleClearFilter}
+        >
           Clear All
         </p>
       </div>

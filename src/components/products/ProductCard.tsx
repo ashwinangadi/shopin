@@ -14,7 +14,7 @@ const ProductCard = ({
   returnPolicy,
 }: any) => {
   return (
-    <div key={id} className=" space-y-4 hover:shadow-lg">
+    <div key={id} className="space-y-4 hover:shadow-lg">
       <Image
         src={thumbnail}
         alt=""
@@ -27,7 +27,7 @@ const ProductCard = ({
           <p className="">
             {title.length > 20 ? title.substring(0, 20) + "..." : title}
           </p>
-          <p className="text-xs text-gray-500">{brand}</p>
+          <p className="text-xs text-gray-500">{brand ? brand : "Local Business"}</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="flex text-xs text-white rounded-sm p-0.5 px-1.5 gap-1 bg-green-700 w-fit">
