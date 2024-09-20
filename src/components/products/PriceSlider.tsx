@@ -6,10 +6,16 @@ const PriceSlider = ({ data }: any) => {
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const urlParams = new URLSearchParams(searchParams);
 
-  const handleSliderChange = (values: number[]) => {
+  const priceRange = data?.data?.products
+    ?.map((item: any) => Number(item.price))
+    .sort((a: any, b: any) => a - b);
+
+  const priceRangeMax = priceRange && Math.max(...priceRange);
+  const priceRangeMin = priceRange && Math.min(...priceRange);
+
+  const handleSliderCommit = (values: number[]) => {
     const [priceMin, priceMax] = values; // Destructure the values array
     const params = new URLSearchParams(searchParams.toString());
 
@@ -18,13 +24,7 @@ const PriceSlider = ({ data }: any) => {
 
     replace(`${pathname}?${params.toString()}`);
   };
-  const dummyArray = [1, 2, 10];
-  const priceRange = data?.data?.products
-    ?.map((item: any) => Number(item.price))
-    .sort((a: any, b: any) => a - b);
 
-  const priceRangeMax = priceRange && Math.max(...priceRange);
-  const priceRangeMin = priceRange && Math.min(...priceRange);
   return (
     <div>
       <p className="flex flex-1 items-center justify-between pb-4 text-sm font-medium ">
@@ -36,7 +36,15 @@ const PriceSlider = ({ data }: any) => {
             defaultValue={[priceRangeMin, priceRangeMax]}
             min={priceRangeMin}
             max={priceRangeMax}
-            onValueCommit={handleSliderChange}
+            value={
+              urlParams.get("priceMin")
+                ? [
+                    Number(urlParams.get("priceMin")),
+                    Number(urlParams.get("priceMax")),
+                  ]
+                : [priceRangeMin, priceRangeMax]
+            }
+            onValueChange={handleSliderCommit}
           />
           <span className="text-xs flex items-center justify-between mt-1">
             <p>{priceRangeMin}</p>
@@ -64,5 +72,4 @@ const PriceSlider = ({ data }: any) => {
     </div>
   );
 };
-
 export default PriceSlider;
