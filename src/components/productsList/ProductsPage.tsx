@@ -3,7 +3,7 @@ import { getProducts, LIMIT } from "@/utils/api/api";
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useMemo } from "react";
 import SortOrder from "./SortOrder";
 import ProductCard from "./ProductCard";
 import Filter from "./Filter";
@@ -11,6 +11,7 @@ import ProductCount from "./ProductCount";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import ProductsPagination from "./ProductsPagination";
 import { Product } from "@/types";
+import Link from "next/link";
 
 const ProductsPage = () => {
   const searchParams = useSearchParams();
@@ -50,44 +51,57 @@ const ProductsPage = () => {
   const filterPriceMin = searchParams.get("priceMin");
   const filterPriceMax = searchParams.get("priceMax");
 
-  const filteredProducts = data?.products
-    .filter((product: Product) => {
-      // Brand Filter
-      return filterBrands.length > 0
-        ? filterBrands.includes(
-            product?.brand !== undefined
-              ? product?.brand?.split(" ").join("_").toLowerCase()
-              : "local_business"
-          )
-        : product;
-    })
-    .filter((product: Product) => {
-      // Availability Filter
-      return filterAvailability.length > 0
-        ? filterAvailability.includes(
-            product?.availabilityStatus?.split(" ").join("_").toLowerCase()
-          )
-        : product;
-    })
-    .filter((product: Product) =>
-      filterRatings.length > 0
-        ? filterRatings.some((rate) => {
-            return +product.rating >= Number(rate);
-          })
-        : product
-    )
-    .filter((product: Product) =>
-      filterDiscount.length > 0
-        ? filterDiscount.some((rate) => {
-            return +product.discountPercentage >= Number(rate);
-          })
-        : product
-    )
-    .filter((product: Product) => {
-      return filterPriceMin && filterPriceMax
-        ? +product.price >= +filterPriceMin && +product.price <= +filterPriceMax
-        : product;
-    });
+  const filteredProducts = useMemo(
+    () =>
+      data?.products
+        .filter((product: Product) => {
+          // Brand Filter
+          return filterBrands.length > 0
+            ? filterBrands.includes(
+                product?.brand !== undefined
+                  ? product?.brand?.split(" ").join("_").toLowerCase()
+                  : "local_business"
+              )
+            : product;
+        })
+        .filter((product: Product) => {
+          // Availability Filter
+          return filterAvailability.length > 0
+            ? filterAvailability.includes(
+                product?.availabilityStatus?.split(" ").join("_").toLowerCase()
+              )
+            : product;
+        })
+        .filter((product: Product) =>
+          filterRatings.length > 0
+            ? filterRatings.some((rate) => {
+                return +product.rating >= Number(rate);
+              })
+            : product
+        )
+        .filter((product: Product) =>
+          filterDiscount.length > 0
+            ? filterDiscount.some((rate) => {
+                return +product.discountPercentage >= Number(rate);
+              })
+            : product
+        )
+        .filter((product: Product) => {
+          return filterPriceMin && filterPriceMax
+            ? +product.price >= +filterPriceMin &&
+                +product.price <= +filterPriceMax
+            : product;
+        }),
+    [
+      filterPriceMin,
+      filterPriceMax,
+      filterAvailability,
+      filterRatings,
+      filterDiscount,
+      filterBrands,
+      data?.products,
+    ]
+  );
 
   // ---------------------------------------------------------------------------------------------------------------
   return (
@@ -139,18 +153,19 @@ const ProductsPage = () => {
                   filteredProducts.length > 0 ? (
                     filteredProducts.map((item: Product) => {
                       return (
-                        <ProductCard
-                          key={item.id}
-                          id={item.id}
-                          thumbnail={item.thumbnail}
-                          title={item.title}
-                          brand={item.brand}
-                          rating={item.rating}
-                          price={item.price}
-                          discountPercentage={item.discountPercentage}
-                          shippingInformation={item.shippingInformation}
-                          returnPolicy={item.returnPolicy}
-                        />
+                        <Link href={`/products/${item.id}`} key={item.id}>
+                          <ProductCard
+                            id={item.id}
+                            thumbnail={item.thumbnail}
+                            title={item.title}
+                            brand={item.brand}
+                            rating={item.rating}
+                            price={item.price}
+                            discountPercentage={item.discountPercentage}
+                            shippingInformation={item.shippingInformation}
+                            returnPolicy={item.returnPolicy}
+                          />
+                        </Link>
                       );
                     })
                   ) : (

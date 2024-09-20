@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useMemo } from "react";
 import { Slider } from "../ui/slider";
 import { Product, DataList } from "@/types";
 
@@ -9,9 +9,13 @@ const PriceSlider = ({ data }: { data: DataList }) => {
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
 
-  const priceRange = data?.products
-    ?.map((item: Product) => Number(item.price))
-    .sort((a: any, b: any) => a - b);
+  const priceRange = useMemo(
+    () =>
+      data?.products
+        ?.map((item: Product) => Number(item.price))
+        .sort((a: any, b: any) => a - b),
+    [data?.products]
+  );
 
   const priceRangeMax = priceRange && Math.max(...priceRange);
   const priceRangeMin = priceRange && Math.min(...priceRange);

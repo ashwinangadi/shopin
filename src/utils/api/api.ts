@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 export const LIMIT = 20;
 
-export async function getSingleProduct({ id }: { id: string }) {
+export async function getSingleProduct(id: string) {
   const url = `https://dummyjson.com/products/${id}`;
   try {
     const response = await fetch(url);
@@ -63,7 +63,7 @@ export async function getProducts({
   const searchProducts = `https://dummyjson.com/products/search?q=${searchQuery}&${options}`;
   const catagoryProductsurl = `https://dummyjson.com/products/category/${selectedCategory}?${options}`;
   const allProductsurl = `https://dummyjson.com/products?${options}`;
-  
+
   try {
     const response = await fetch(
       selectedCategory !== null

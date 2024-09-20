@@ -1,4 +1,4 @@
-import ProductsPage from "@/components/products/ProductsPage";
+import ProductsPage from "@/components/productsList/ProductsPage";
 import { getQueryClient } from "@/providers/get-query-client";
 import { getProducts } from "@/utils/api/api";
 
@@ -13,11 +13,11 @@ export default function Home() {
   });
 
   return (
-    <main className="flex min-h-[calc(100vh-96px)] w-full mx-auto flex-col mt-24 md:mt-16 ">
+    <section className="flex min-h-[calc(100vh-96px)] w-full mx-auto flex-col mt-24 md:mt-16 ">
       <HydrationBoundary state={dehydrate(queryClient)}>
         {/* <p className="">Page.tsx</p> */}
         <ProductsPage />
       </HydrationBoundary>
-    </main>
+    </section>
   );
 }

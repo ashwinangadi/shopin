@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
   Accordion,
@@ -30,11 +30,13 @@ const Filter = ({ data }: { data: DataList }) => {
     replace(newURL);
   };
 
-  const filteredBrands = new Set(
-    data?.products?.map((item: any) => item.brand)
+  const filteredBrands = useMemo(
+    () => new Set(data?.products?.map((item: any) => item.brand)),
+    [data?.products]
   );
-  const availability = new Set(
-    data?.products?.map((item: any) => item.availabilityStatus)
+  const availability = useMemo(
+    () => new Set(data?.products?.map((item: any) => item.availabilityStatus)),
+    [data?.products]
   );
   const ratingArray = ["4", "3", "2", "1"];
   const discountArray = ["15", "10", "5"];
