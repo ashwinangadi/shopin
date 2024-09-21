@@ -36,7 +36,7 @@ const CategoriesList = () => {
           !isError ? (
             <>
               <Link
-                href={`?${new URLSearchParams(urlParam({ category: null, sort: sortBy, order: orderBy }))}`}
+                href={`/products?${new URLSearchParams(urlParam({ category: null, sort: sortBy, order: orderBy }))}`}
               >
                 <SheetClose asChild>
                   <p className="text-black py-3 ps-2 border-y hover:bg-input cursor-pointer">
@@ -49,7 +49,7 @@ const CategoriesList = () => {
                   // <Link key={item.id + item.name} href={`?${new URLSearchParams({category: item.slug})}`}>
                   <Link
                     key={item.id + item.name}
-                    href={`?${new URLSearchParams(urlParam({ category: item.slug, sort: sortBy, order: orderBy }))}`}
+                    href={`/products?${new URLSearchParams(urlParam({ category: item.slug, sort: sortBy, order: orderBy }))}`}
                   >
                     <SheetClose asChild>
                       <p className="text-black py-3 ps-2 border-y hover:bg-input cursor-pointer">
