@@ -54,3 +54,11 @@ export type DataList = {
   skip: number;
   limit: number;
 };
+
+export type Review = {
+  rating: number;
+  comment: string;
+  date: string; // Use `Date` if you plan to parse it to a Date object.
+  reviewerName: string;
+  reviewerEmail: string;
+};
