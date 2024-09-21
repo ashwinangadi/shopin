@@ -29,7 +29,7 @@ const ProductsPage = () => {
       sortBy,
       orderBy,
       skip,
-      // searchQuery,
+      searchQuery,
     ],
     queryFn: () =>
       getProducts({
@@ -38,7 +38,7 @@ const ProductsPage = () => {
         orderBy,
         limit,
         skip,
-        // searchQuery,
+        searchQuery,
       }),
   });
 
