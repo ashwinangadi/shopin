@@ -7,6 +7,7 @@ import { BadgeCheck, Loader, ShieldCheck, Truck, UndoDot } from "lucide-react";
 import SimilarProducts from "./SimilarProducts";
 import { Review } from "@/types";
 import { Button } from "../ui/button";
+import ProductDetailShimmer from "../shimmer/ProductDetailShimmer";
 
 const ProductDetailsPage = ({ productId }: { productId: string }) => {
   const { data, isError, error, isLoading } = useQuery({
@@ -156,7 +157,7 @@ const ProductDetailsPage = ({ productId }: { productId: string }) => {
         )
       ) : (
         <div className="col-span-full flex items-center  justify-center w-full">
-          <Loader className="w-20 h-20 animate-spin" />
+          <ProductDetailShimmer />
         </div>
       )}
       <SimilarProducts catagory={data?.category} productId={productId} />

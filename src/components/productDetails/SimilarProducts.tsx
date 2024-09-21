@@ -12,8 +12,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
-const SimilarProducts = ({catagory, productId}: any) => {
+const SimilarProducts = ({ catagory, productId }: any) => {
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["products", catagory],
     queryFn: () => getProducts({ category: catagory }),
@@ -24,7 +25,6 @@ const SimilarProducts = ({catagory, productId}: any) => {
     [data?.products]
   );
 
-  console.log("filteredBrands", similarProducts);
   return (
     <div className="">
       <hr className="my-4 w-full" />
@@ -34,39 +34,25 @@ const SimilarProducts = ({catagory, productId}: any) => {
           !isError ? (
             data?.total > 0 ? (
               <>
-                <Carousel
-                  opts={{
-                    align: "start",
-                  }}
-                  className="w-[calc(100%-100px)] mx-auto"
-                >
-                  <CarouselContent className="gap-5 w-full min-w-xs">
-                    {similarProducts?.map((item: Product) => {
-                      return (
-                        <Link href={`/products/${item.id}`} key={item.id}>
-                          <CarouselItem
-                            // key={index}
-                            className="md:basis-1/2 lg:basis-1/3 "
-                          >
-                            <ProductCard
-                              id={item.id}
-                              thumbnail={item.thumbnail}
-                              title={item.title}
-                              brand={item.brand}
-                              rating={item.rating}
-                              price={item.price}
-                              discountPercentage={item.discountPercentage}
-                              shippingInformation={item.shippingInformation}
-                              returnPolicy={item.returnPolicy}
-                            />
-                          </CarouselItem>
-                        </Link>
-                      );
-                    })}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
+                <div className="gap-5 flex overflow-auto w-full min-w-xs">
+                  {similarProducts?.map((item: Product) => {
+                    return (
+                      <Link href={`/products/${item.id}`} key={item.id}>
+                        <ProductCard
+                          id={item.id}
+                          thumbnail={item.thumbnail}
+                          title={item.title}
+                          brand={item.brand}
+                          rating={item.rating}
+                          price={item.price}
+                          discountPercentage={item.discountPercentage}
+                          shippingInformation={item.shippingInformation}
+                          returnPolicy={item.returnPolicy}
+                        />
+                      </Link>
+                    );
+                  })}
+                </div>
               </>
             ) : (
               <p className="col-span-full text-center  flex gap-2 items-center justify-center">
@@ -80,8 +66,16 @@ const SimilarProducts = ({catagory, productId}: any) => {
             </p>
           )
         ) : (
-          <div className="col-span-full flex items-center  justify-center w-full">
-            <Loader className="w-20 h-20 animate-spin" />
+          <div className="col-span-full flex gap-5 overflow-auto">
+            {Array(4)
+              .fill(4)
+              .map((item, index) => {
+                return (
+                  <div key={index} className="w-full max-w-xs">
+                    <ProductCardShimmer />
+                  </div>
+                );
+              })}
           </div>
         )}
       </div>

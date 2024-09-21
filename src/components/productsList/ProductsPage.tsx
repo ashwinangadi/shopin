@@ -12,6 +12,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import ProductsPagination from "./ProductsPagination";
 import { Product } from "@/types";
 import Link from "next/link";
+import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
 const ProductsPage = () => {
   const searchParams = useSearchParams();
@@ -185,8 +186,16 @@ const ProductsPage = () => {
                 </p>
               )
             ) : (
-              <div className="col-span-full flex items-center h-[75vh] justify-center w-full">
-                <Loader className="w-20 h-20 animate-spin" />
+              <div className="col-span-full flex flex-wrap gap-5">
+                {Array(10)
+                  .fill(null)
+                  .map((item, index) => {
+                    return (
+                      <div key={index} className="">
+                        <ProductCardShimmer />
+                      </div>
+                    );
+                  })}
               </div>
             )}
           </div>
