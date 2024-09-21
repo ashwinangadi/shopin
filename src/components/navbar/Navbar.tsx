@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import CategoriesList from "../catagories-list/CategoriesList";
 import Search from "../search/Search";
 import { ShoppingCart } from "lucide-react";
+import Logo from "./Logo";
 
 const Navbar = () => {
   return (
@@ -10,7 +11,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between py-2 w-full">
         <div className="flex gap-2">
           <CategoriesList />
-          <p className="text-2xl font-extrabold">ShopIN</p>
+          <Logo />
         </div>
         <span className="hidden md:block w-full max-w-5xl">
           <Search placeholder="Search" />
