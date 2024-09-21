@@ -15,7 +15,7 @@ const ProductCard = ({
   returnPolicy,
 }: ProductCardProps) => {
   return (
-    <div key={id} className="space-y-4 hover:shadow-lg">
+    <div key={id} className="space-y-4 hover:shadow-lg w-full min-w-[200px]">
       <Image
         src={thumbnail}
         alt=""
