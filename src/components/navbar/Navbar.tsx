@@ -4,6 +4,7 @@ import CategoriesList from "../catagories-list/CategoriesList";
 import Search from "../search/Search";
 import { ShoppingCart } from "lucide-react";
 import Logo from "./Logo";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -19,7 +20,9 @@ const Navbar = () => {
         {/* <p className="text-2xl ">SearchBar</p> */}
         <div className="flex items-center gap-3">
           <Button variant={"secondary"}>Login</Button>
-          <ShoppingCart className="h-8 w-8" />
+          <Link href={`/cart`}>
+            <ShoppingCart className="h-8 w-8" />
+          </Link>
         </div>
       </div>
       <div className="w-full md:hidden">

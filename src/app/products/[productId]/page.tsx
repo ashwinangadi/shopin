@@ -3,7 +3,7 @@ import { getQueryClient } from "@/providers/get-query-client";
 import { getSingleProduct } from "@/utils/api/api";
 import { dehydrate, HydrationBoundary, useQuery } from "@tanstack/react-query";
 
-export default function Page({ params }: { params: { productId: string } }) {
+export default function ProductIdHome({ params }: { params: { productId: string } }) {
   const queryClient = getQueryClient();
 
   queryClient.prefetchQuery({

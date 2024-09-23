@@ -4,7 +4,7 @@ import { getProducts } from "@/utils/api/api";
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-export default function Home() {
+export default function ProductHome() {
   const queryClient = getQueryClient();
 
   queryClient.prefetchQuery({

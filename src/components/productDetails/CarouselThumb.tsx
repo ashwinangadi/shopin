@@ -20,14 +20,14 @@ export const CarouselThumb: React.FC<PropType> = (props) => {
       <button
         onClick={onClick}
         type="button"
-        className="flex items-center justify-center rounded-md  min-w-full xl:min-w-[80px] aspect-square "
+        className="flex aspect-square items-center justify-center rounded-md  min-w-ful object-fill xl:min-w-[80px]  "
       >
         <Image
           src={image}
           alt="image"
           width={200}
           height={200}
-          className="object-fill"
+          className="h-full max-h-40 object-contain"
         />
       </button>
     </div>

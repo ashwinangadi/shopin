@@ -6,8 +6,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Image from "next/image";
@@ -71,7 +69,7 @@ export function ImageCarousel({ images }: { images: string[] }) {
                       alt="image"
                       width={400}
                       height={400}
-                      className="w-full h-full"
+                      className="w-full h-full object-contain"
                     />
                   </CardContent>
                   <p className="text-xs text-center text-muted-foreground">
@@ -82,11 +80,11 @@ export function ImageCarousel({ images }: { images: string[] }) {
             ))}
         </CarouselContent>
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <Button className="h-12 lg:h-16 text-sm lg:text-lg xl:text-xl rounded-none bg-orange-400 gap-3">
+          <Button className="h-12 lg:h-16 text-sm lg:text-lg font-light rounded-none bg-orange-400 gap-3">
             <ShoppingCart className="w-5 h-5 fill-white" />
             <span>Add to Cart</span>
           </Button>
-          <Button className="h-12 lg:h-16 text-sm lg:text-lg xl:text-xl rounded-none bg-orange-600 gap-3">
+          <Button className="h-12 lg:h-16 text-sm lg:text-lg font-light rounded-none bg-orange-600 gap-3">
             <Zap className="w-5 h-5 fill-white" />
             <span> Buy Now</span>
           </Button>
