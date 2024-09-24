@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { getQueryClient } from "@/providers/get-query-client";
 import { categoryListOptions } from "@/utils/api/api";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,10 +28,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReactQueryProvider>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Navbar />
-          </HydrationBoundary>
-          {children}
+          <Suspense>
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Navbar />
+            </HydrationBoundary>
+            {children}
+          </Suspense>
         </ReactQueryProvider>
       </body>
     </html>
