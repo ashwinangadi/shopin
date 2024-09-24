@@ -5,6 +5,7 @@ import Search from "../search/Search";
 import { ShoppingCart } from "lucide-react";
 import Logo from "./Logo";
 import Link from "next/link";
+import KindAuth from "./KindAuth";
 
 const Navbar = () => {
   return (
@@ -19,7 +20,8 @@ const Navbar = () => {
         </span>
         {/* <p className="text-2xl ">SearchBar</p> */}
         <div className="flex items-center gap-3">
-          <Button variant={"secondary"}>Login</Button>
+          {/* <Button variant={"secondary"}>Login</Button> */}
+          <KindAuth />
           <Link href={`/cart`}>
             <ShoppingCart className="h-8 w-8" />
           </Link>
