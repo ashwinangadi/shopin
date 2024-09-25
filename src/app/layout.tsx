@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import Navbar from "@/components/navbar/Navbar";
 import { getQueryClient } from "@/providers/get-query-client";
 import { categoryListOptions } from "@/utils/api/api";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
+import Provider from "@/providers/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,14 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReactQueryProvider>
+        <Provider>
           <Suspense>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <Navbar />
             </HydrationBoundary>
             {children}
           </Suspense>
-        </ReactQueryProvider>
+        </Provider>
       </body>
     </html>
   );
