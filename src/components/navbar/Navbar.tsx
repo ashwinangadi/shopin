@@ -2,9 +2,11 @@ import React from "react";
 import { Button } from "../ui/button";
 import CategoriesList from "../catagories-list/CategoriesList";
 import Search from "../search/Search";
-import { ShoppingCart } from "lucide-react";
+import { Power, ShoppingCart } from "lucide-react";
 import Logo from "./Logo";
 import Link from "next/link";
+import { signIn, signOut } from "../../../auth";
+import AuthButtons from "./auth-buttons";
 
 const Navbar = () => {
   return (
@@ -17,9 +19,9 @@ const Navbar = () => {
         <span className="hidden md:block w-full max-w-5xl">
           <Search placeholder="Search" />
         </span>
-        {/* <p className="text-2xl ">SearchBar</p> */}
         <div className="flex items-center gap-3">
-          <Button variant={"secondary"}>Login</Button>
+          <AuthButtons />
+
           <Link href={`/cart`}>
             <ShoppingCart className="h-8 w-8" />
           </Link>
