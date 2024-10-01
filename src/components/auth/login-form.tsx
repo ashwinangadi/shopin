@@ -21,8 +21,13 @@ import { ArrowRight, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { authenticate } from "@/lib/actions";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  // console.log("searchParams________________",searchParams.get("callbackUrl"));
+
   const [globalError, setGlobalError] = useState<string>("");
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -34,7 +39,7 @@ export function LoginForm() {
 
   const onSubmit = async (values: z.infer<typeof signInSchema>) => {
     try {
-      const result = await authenticate(values);
+      const result = await authenticate({ params: callbackUrl, values });
       if (result?.message) {
         setGlobalError(result.message);
       }
@@ -42,6 +47,7 @@ export function LoginForm() {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 gap-5">
       <span className="text-center text-sm bg-yellow-50 w-full p-4 border rounded-md">
@@ -79,7 +85,7 @@ export function LoginForm() {
                       <Input
                         type="email"
                         placeholder="Enter your email address"
-                        // autoComplete="off"
+                        autoComplete="on"
                         {...field}
                       />
                     </FormControl>

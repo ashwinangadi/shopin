@@ -3,13 +3,15 @@ import { Button } from "../ui/button";
 import { auth, signIn, signOut } from "../../../auth";
 import { Power } from "lucide-react";
 import Link from "next/link";
+import { headers } from "next/headers";
 
 const AuthButtons = async () => {
   const session = await auth();
+
   return (
     <span className="flex items-center gap-2">
       {!session?.user ? (
-        <Link href={`/api/auth/signin`}>
+        <Link href={`/login`}>
           <Button variant={"secondary"}> SignIn</Button>
         </Link>
       ) : (

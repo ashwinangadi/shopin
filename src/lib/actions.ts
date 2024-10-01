@@ -4,9 +4,12 @@ import { AuthError } from "next-auth";
 import { signIn } from "../../auth";
 import { signInSchema } from "./zod";
 
-export async function authenticate(values: {
-  email: string;
-  password: string;
+export async function authenticate({
+  params,
+  values,
+}: {
+  params?: string | null;
+  values: { email: string; password: string };
 }) {
   const validatedFields = signInSchema.safeParse(values);
 
@@ -16,9 +19,10 @@ export async function authenticate(values: {
     };
   }
 
+  const redirectTo = params ?? "/products";
   const { email, password } = validatedFields.data;
   try {
-    await signIn("credentials", { email, password, redirectTo: "/products" });
+    await signIn("credentials", { email, password, redirectTo: redirectTo });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
