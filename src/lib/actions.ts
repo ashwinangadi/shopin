@@ -4,16 +4,18 @@ import { AuthError } from "next-auth";
 import { signIn } from "../../auth";
 import { signInSchema } from "./zod";
 
-export async function authenticate(prevState: unknown, formData: FormData) {
-  const validatedFields = signInSchema.safeParse(
-    Object.fromEntries(formData.entries())
-  );
+export async function authenticate(values: {
+  email: string;
+  password: string;
+}) {
+  const validatedFields = signInSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return {
       error: validatedFields.error.flatten().fieldErrors,
     };
   }
+
   const { email, password } = validatedFields.data;
   try {
     await signIn("credentials", { email, password, redirectTo: "/products" });
@@ -21,9 +23,13 @@ export async function authenticate(prevState: unknown, formData: FormData) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return "Invalid credentials.";
+          return {
+            message: "Invalid credentials",
+          };
         default:
-          return "Something went wrong.";
+          return {
+            message: "Something went wrong.",
+          };
       }
     }
     throw error;
