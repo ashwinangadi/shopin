@@ -1,9 +1,14 @@
-import React from 'react'
+import { SignupForm } from "@/components/auth/signup-form";
+import React from "react";
 
 const SignupPage = () => {
   return (
-    <div className='mt-24'>SignupPage</div>
-  )
-}
+    <section className="flex items-center justify-center md:h-screen">
+      <div className="relative mx-auto flex w-full max-w-[450px] flex-col space-y-2.5 p-4 md:-mt-32">
+        <SignupForm />
+      </div>
+    </section>
+  );
+};
 
-export default SignupPage
+export default SignupPage;

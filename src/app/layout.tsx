@@ -7,6 +7,7 @@ import { categoryListOptions } from "@/utils/api/api";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import Provider from "@/providers/Providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
               <Navbar />
             </HydrationBoundary>
             {children}
+            <Toaster richColors expand={false} position="bottom-right" closeButton />
           </Suspense>
         </Provider>
       </body>

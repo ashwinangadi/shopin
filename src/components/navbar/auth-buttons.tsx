@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { auth, signIn, signOut } from "../../../auth";
 import { Power } from "lucide-react";
 import Link from "next/link";
-import { headers } from "next/headers";
 
 const AuthButtons = async () => {
   const session = await auth();
