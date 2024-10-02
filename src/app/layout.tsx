@@ -8,6 +8,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import Provider from "@/providers/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import { connectToMongoDB } from "@/lib/db";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 
   // queryClient.prefetchQuery(dealsOptions);
   queryClient.prefetchQuery(categoryListOptions);
+  connectToMongoDB()
   return (
     <html lang="en">
       <body className={inter.className}>

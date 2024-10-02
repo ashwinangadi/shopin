@@ -17,8 +17,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/zod";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TriangleAlert } from "lucide-react";
 import Link from "next/link";
+import { createUser } from "@/lib/actions";
 
 export function SignupForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -33,6 +34,14 @@ export function SignupForm() {
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     console.log("values", values);
+    try {
+      const result = await createUser(values);
+      console.log("result__________________snigupPage", result);
+      return result;
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.", error);
+      throw error
+    }
   };
 
   return (
@@ -44,6 +53,16 @@ export function SignupForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+        {form.formState.errors.root && (
+            <div
+              className="flex w-full items-center p-4 mb-4 gap-2 text-sm text-red-800 rounded-lg bg-red-100"
+              role="alert"
+            >
+              <TriangleAlert className="h-4 w-4 text-red-500" />
+              <span className="sr-only">Error</span>
+              {/* <div>{globalError}</div> */}
+            </div>
+          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
