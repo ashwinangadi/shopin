@@ -76,8 +76,8 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
     console.log("newUser___________________________", newUser);
     return newUser.toString();
   } catch (error) {
-    console.log("errrrrrr_____________________________", error?.errorResponse);;
-    throw error
+    // console.log("errrrrrr_____________________________", error?.errorResponse);
+    throw new Error
   }
 };
 
@@ -119,3 +119,4 @@ export async function getUser(email: string): Promise<any | undefined> {
     throw new Error("Failed to fetch user.");
   }
 }
+ 

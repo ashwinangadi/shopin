@@ -9,8 +9,8 @@ export interface IUser {
   isVerified: boolean;
   forgotPasswordToken: String;
   forgotPasswordTokenExpiry: Date;
-  verifyToken: String;
-  verifyTokenExpiry: Date;
+  verifyToken: String | undefined;
+  verifyTokenExpiry: Date | undefined;
 }
 
 // Merging IUser interface with mongoose's Document interface to create

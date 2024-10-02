@@ -19,9 +19,16 @@ import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/zod";
 import { ArrowRight, TriangleAlert } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 import { createUser } from "@/lib/actions";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function SignupForm() {
+  const router = useRouter();
+  const [globalError, setGlobalError] = useState<string>("");
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -34,13 +41,21 @@ export function SignupForm() {
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     console.log("values", values);
+    const userData = {
+      username: values.username,
+      email: values.email,
+      password: values.password,
+    };
     try {
-      const result = await createUser(values);
-      console.log("result__________________snigupPage", result);
-      return result;
-    } catch (error) {
+      //   const result = await createUser(values);
+      const response = await axios.post("/api/users/signup", userData);
+      //   console.log("result__________________snigupPage", response);
+      toast.success(response?.data.message);
+      router.push("/login");
+    } catch (error: any) {
       console.log("An unexpected error occurred. Please try again.", error);
-      throw error
+      setGlobalError(error?.response.data.error);
+      toast.error(error?.response.data.error);
     }
   };
 
@@ -53,14 +68,14 @@ export function SignupForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-        {form.formState.errors.root && (
+          {globalError && (
             <div
               className="flex w-full items-center p-4 mb-4 gap-2 text-sm text-red-800 rounded-lg bg-red-100"
               role="alert"
             >
               <TriangleAlert className="h-4 w-4 text-red-500" />
               <span className="sr-only">Error</span>
-              {/* <div>{globalError}</div> */}
+              <div>{globalError}</div>
             </div>
           )}
           <Form {...form}>
@@ -129,7 +144,7 @@ export function SignupForm() {
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="confirmPassword"
+                        type="password"
                         placeholder="Confirm password"
                         {...field}
                       />
@@ -140,15 +155,16 @@ export function SignupForm() {
               />
 
               <Button
-                className="mt-4 w-full"
                 type="submit"
-                aria-disabled={form.formState.isSubmitting}
+                disabled={
+                  !form.formState.isValid || form.formState.isSubmitting
+                }
+                className="mt-4 w-full disabled:cursor-none"
               >
                 Signup <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
               </Button>
             </form>
           </Form>
-
           <p className="text-sm font-light text-gray-500 mt-4">
             Do you have an account ?
             <Link href="/login">

@@ -21,10 +21,12 @@ import { ArrowRight, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { authenticate } from "@/lib/actions";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import axios from "axios";
 
 export function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   // console.log("searchParams________________",searchParams.get("callbackUrl"));
@@ -39,16 +41,20 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+    const userData = {
+      email: values.email,
+      password: values.password,
+    };
     try {
-      const result = await authenticate({ params: callbackUrl, values });
-      if (result?.message) {
-        setGlobalError(result.message);
-        toast.error(result.message);
-      } else {
-        toast.success("Login successful!");
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
+      //   const result = await createUser(values);
+      const response = await axios.post("/api/users/login", userData);
+      //   console.log("result__________________snigupPage", response);
+      toast.success(response?.data.message);
+      router.push("/profile");
+    } catch (error: any) {
+      console.log("An unexpected error occurred. Please try again.", error);
+      setGlobalError(error?.response.data.error);
+      toast.error(error?.response.data.error);
     }
   };
 
@@ -121,7 +127,9 @@ export function LoginForm() {
               <Button
                 className="mt-4 w-full"
                 type="submit"
-                aria-disabled={form.formState.isSubmitting}
+                disabled={
+                  !form.formState.isValid || form.formState.isSubmitting
+                }
               >
                 Log in <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
               </Button>
