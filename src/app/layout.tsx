@@ -36,7 +36,7 @@ export default function RootLayout({
               <Navbar />
             </HydrationBoundary>
             {children}
-            <Toaster richColors expand={false} position="bottom-right" closeButton />
+            <Toaster richColors expand={false} position="bottom-center" closeButton />
           </Suspense>
         </Provider>
       </body>
