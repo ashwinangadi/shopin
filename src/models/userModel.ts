@@ -7,10 +7,10 @@ export interface IUser {
   email: string;
   password: string;
   isVerified: boolean;
-  forgotPasswordToken: String;
-  forgotPasswordTokenExpiry: Date;
-  verifyToken: String;
-  verifyTokenExpiry: Date;
+  forgotPasswordToken: String | undefined;
+  forgotPasswordTokenExpiry: Date | undefined;
+  verifyToken: String | undefined;
+  verifyTokenExpiry: Date | undefined;
 }
 
 // Merging IUser interface with mongoose's Document interface to create
