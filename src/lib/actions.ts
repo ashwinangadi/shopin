@@ -48,38 +48,75 @@ export async function authenticate({
 
 // Function to create a new user
 export const createUser = async (values: z.infer<typeof signUpSchema>) => {
-  await connectToMongoDB();
-
-  // Extracting user details from formData
-  const username = values.username;
-  const email = values.email;
-  const password = values.password;
-
-  let salt = await bcrypt.genSalt(1);
-  let hash = await bcrypt.hash(password, salt);
-
   try {
-    // Creating a new user using User model
+    await connectToMongoDB();
+
+    const { username, email, password } = values;
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+
     const newUser = await User.create({
       username,
       email,
-      password: hash, // In a real-world application, make sure to hash the password before saving
+      password: hash,
     });
+    const savedUser = await newUser.save();
 
-    // Saving the new user
-    newUser.save();
-
-    // Revalidate path if needed (for example, the homepage or user-specific page)
-    // revalidatePath("/login");
-
-    // Returning the string representation of the new user
-    console.log("newUser___________________________", newUser);
-    return newUser.toString();
-  } catch (error) {
-    console.log("errrrrrr_____________________________", error?.errorResponse);;
-    throw error
+    // Return a plain object representation of the user
+    return {
+      success: true,
+      user: {
+        _id: savedUser?._id?.toString(),
+        username: savedUser.username,
+        email: savedUser.email,
+        isVerified: savedUser.isVerified,
+        createdAt: savedUser.createdAt,
+        updatedAt: savedUser.updatedAt,
+      },
+    };
+  } catch (error: any) {
+    if (error.code === 11000) {
+      if (error.keyPattern.username) {
+        return { success: false, error: "Username already exists" };
+      }
+      if (error.keyPattern.email) {
+        return { success: false, error: "Email already exists" };
+      }
+      return { success: false, error: "Duplicate key error" };
+    }
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map(
+        (err: any) => err.message
+      );
+      return { success: false, error: validationErrors };
+    }
+    return { success: false, error: "An unexpected error occurred" };
   }
 };
+
+export async function verifyEmail(token: string) {
+  try {
+    const user = await User.findOne({
+      verifyToken: token,
+      verifyTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return { error: "Invalid token", status: 400 };
+    }
+
+    user.isVerified = true;
+    user.verifyToken = undefined;
+    user.verifyTokenExpiry = undefined;
+
+    await user.save();
+
+    return { message: "Email Verified Successfully.", success: true };
+  } catch (error: any) {
+    return { error: error.message, status: 500 };
+  }
+}
 
 // Function to delete a user
 export const deleteUser = async (id: FormData) => {
@@ -98,7 +135,6 @@ export const deleteUser = async (id: FormData) => {
     // Returning a success message after deleting the user
     return "user deleted";
   } catch (error) {
-    console.log(error);
     return { message: "error deleting user" };
   }
 };
@@ -115,7 +151,6 @@ export async function getUser(email: string): Promise<any | undefined> {
       return user;
     }
   } catch (error) {
-    console.error("Failed to fetch user:", error);
     throw new Error("Failed to fetch user.");
   }
 }
