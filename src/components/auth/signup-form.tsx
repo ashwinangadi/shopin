@@ -17,11 +17,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/zod";
-import { ArrowRight, TriangleAlert } from "lucide-react";
+import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { createUser } from "@/lib/actions";
-
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export function SignupForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -33,14 +36,66 @@ export function SignupForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-    console.log("values", values);
     try {
       const result = await createUser(values);
-      console.log("result__________________snigupPage", result);
-      return result;
+
+      if (result.success) {
+        const user = result?.user!;
+
+        const res = axios.post("/api/mail", {
+          email: user?.email,
+          emailType: "VERIFY",
+          userId: user?._id,
+        });
+
+        toast.promise(res, {
+          loading: "Sending verification email...",
+          success: (response) => {
+            return `Account created successfully! Please check your email to verify your account, Redirecting to login page...`;
+          },
+          error: "Account created successfully! Failed to send verification email.",
+        });
+
+        // toast.success(
+        //   "Account created successfully! Please check your email to verify your account."
+        // );
+        // toast.success("Redirecting to login page in 5 seconds...");
+        setTimeout(() => {
+          router.push("/login"); // Redirect to login page after 5 seconds
+        }, 8000);
+      } else {
+        // Handle specific error cases
+        if (result.error === "Email already exists") {
+          form.setError("email", {
+            type: "manual",
+            message: "This email is already registered.",
+          });
+        } else if (result.error === "Username already exists") {
+          form.setError("username", {
+            type: "manual",
+            message: "This username is already taken.",
+          });
+        } else {
+          toast.error(
+            result?.error || "An unexpected error occurred. Please try again."
+          );
+          form.setError("root", {
+            type: "manual",
+            message:
+              (Array.isArray(result?.error)
+                ? result?.error[0]
+                : result?.error) ||
+              "An unexpected error occurred. Please try again.",
+          });
+        }
+      }
     } catch (error) {
-      console.log("An unexpected error occurred. Please try again.", error);
-      throw error
+      console.error("Error during signup:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+      form.setError("root", {
+        type: "manual",
+        message: "An unexpected error occurred. Please try again.",
+      });
     }
   };
 
@@ -53,14 +108,14 @@ export function SignupForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-        {form.formState.errors.root && (
+          {form.formState.errors.root && (
             <div
               className="flex w-full items-center p-4 mb-4 gap-2 text-sm text-red-800 rounded-lg bg-red-100"
               role="alert"
             >
               <TriangleAlert className="h-4 w-4 text-red-500" />
               <span className="sr-only">Error</span>
-              {/* <div>{globalError}</div> */}
+              <div>{form.formState.errors.root.message}</div>
             </div>
           )}
           <Form {...form}>
@@ -140,11 +195,22 @@ export function SignupForm() {
               />
 
               <Button
-                className="mt-4 w-full"
                 type="submit"
-                aria-disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                className="w-full mt-4"
               >
-                Signup <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
+                {form.formState.isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Signing up...
+                  </span>
+                ) : (
+                  <>
+                    <span className="flex items-center justify-between w-full">
+                      <p>Signup</p> <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
+                  </>
+                )}
               </Button>
             </form>
           </Form>

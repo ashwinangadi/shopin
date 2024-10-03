@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
-import { ArrowRight, TriangleAlert } from "lucide-react";
+import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { authenticate } from "@/lib/actions";
 import { useState } from "react";
@@ -29,7 +29,6 @@ export function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl");
   // console.log("searchParams________________",searchParams.get("callbackUrl"));
 
-  const [globalError, setGlobalError] = useState<string>("");
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -42,7 +41,10 @@ export function LoginForm() {
     try {
       const result = await authenticate({ params: callbackUrl, values });
       if (result?.message) {
-        setGlobalError(result.message);
+        form.setError("root", {
+          type: "manual",
+          message: result.message,
+        });
         toast.error(result.message);
       } else {
         toast.success("Login successful!");
@@ -56,9 +58,17 @@ export function LoginForm() {
     <div className="flex flex-col items-center justify-center min-h-screen p-4 gap-5">
       <span className="text-center text-sm bg-yellow-50 w-full p-4 border rounded-md">
         <p className="text-base font-bold mb-2">Dummy Credentials</p>
-        email: john@example.com
-        <br />
-        password: password123
+        <p>email: john@example.com</p>
+        <p>password: password123</p>
+        <p className="mt-2">
+          <span className="font-bold">Note:</span>{" "}
+          <Link href="/signup">
+            <span className="font-medium pl-1 text-blue-600 hover:text-blue-700">
+              SignUp
+            </span>
+          </Link>{" "}
+          to have a great experience!
+        </p>
       </span>
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -67,14 +77,14 @@ export function LoginForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {globalError && (
+          {form.formState.errors.root && (
             <div
               className="flex w-full items-center p-4 mb-4 gap-2 text-sm text-red-800 rounded-lg bg-red-100"
               role="alert"
             >
               <TriangleAlert className="h-4 w-4 text-red-500" />
               <span className="sr-only">Error</span>
-              <div>{globalError}</div>
+              <div>{form.formState.errors.root.message}</div>
             </div>
           )}
           <Form {...form}>
@@ -119,11 +129,25 @@ export function LoginForm() {
               {/* Submit button will go here */}
               {/* <LoadingButton pending={form.formState.isSubmitting} /> */}
               <Button
-                className="mt-4 w-full"
                 type="submit"
-                aria-disabled={form.formState.isSubmitting}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isSubmitSuccessful
+                }
+                className="w-full mt-4"
               >
-                Log in <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
+                {form.formState.isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Logging In...
+                  </span>
+                ) : (
+                  <>
+                    <span className="flex items-center justify-between w-full">
+                      <p>Login</p> <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
+                  </>
+                )}
               </Button>
             </form>
           </Form>
