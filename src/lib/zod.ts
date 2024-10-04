@@ -25,3 +25,9 @@ export const signUpSchema = object({
   path: ["confirmPassword"], // Points to where the error will be displayed
   message: "Passwords must match",
 });
+
+export const resetPasswordSchema = object({
+  email: string({ required_error: "Email is required" })
+    .min(1, "Email is required")
+    .email("Invalid email"),
+});

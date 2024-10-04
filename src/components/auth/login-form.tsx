@@ -23,6 +23,7 @@ import { authenticate } from "@/lib/actions";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import AuthRouting from "./auth-routing";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -63,7 +64,7 @@ export function LoginForm() {
         <p className="mt-2">
           <span className="font-bold">Note:</span>{" "}
           <Link href="/signup">
-            <span className="font-medium pl-1 text-blue-600 hover:text-blue-700">
+            <span className="hover:underline font-medium pl-1 text-blue-600 hover:text-blue-700">
               SignUp
             </span>
           </Link>{" "}
@@ -126,8 +127,6 @@ export function LoginForm() {
                 )}
               />
 
-              {/* Submit button will go here */}
-              {/* <LoadingButton pending={form.formState.isSubmitting} /> */}
               <Button
                 type="submit"
                 disabled={
@@ -161,14 +160,18 @@ export function LoginForm() {
               Sign in with GitHub
             </Button>
           </form> */}
-          <p className="text-sm font-light text-gray-500 mt-4">
-            Don&apos;t have an account yet?
-            <Link href="/signup">
-              <span className="font-medium pl-1 text-blue-600 hover:text-blue-700">
-                Sign Up here
-              </span>
-            </Link>
-          </p>
+          <div>
+            <AuthRouting
+              message="Forgot your password?"
+              routeTo="/reset-password"
+              routeMessage="Reset Password"
+            />
+            <AuthRouting
+              message="Don't have an account yet?"
+              routeTo="/signup"
+              routeMessage="Sign Up here"
+            />
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -23,6 +23,7 @@ import { createUser } from "@/lib/actions";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import AuthRouting from "./auth-routing";
 export function SignupForm() {
   const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -53,7 +54,8 @@ export function SignupForm() {
           success: (response) => {
             return `Account created successfully! Please check your email to verify your account, Redirecting to login page...`;
           },
-          error: "Account created successfully! Failed to send verification email.",
+          error:
+            "Account created successfully! Failed to send verification email.",
         });
 
         // toast.success(
@@ -196,7 +198,10 @@ export function SignupForm() {
 
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isSubmitSuccessful
+                }
                 className="w-full mt-4"
               >
                 {form.formState.isSubmitting ? (
@@ -214,15 +219,11 @@ export function SignupForm() {
               </Button>
             </form>
           </Form>
-
-          <p className="text-sm font-light text-gray-500 mt-4">
-            Do you have an account ?
-            <Link href="/login">
-              <span className="font-medium pl-1 text-blue-600 hover:text-blue-700">
-                Login here
-              </span>
-            </Link>
-          </p>
+          <AuthRouting
+            message="Do you have an account ?"
+            routeTo="/login"
+            routeMessage="Login here"
+          />
         </CardContent>
       </Card>
     </div>

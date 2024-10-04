@@ -61,13 +61,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return NextResponse.redirect(loginUrl);
       }
 
-      // // If authenticated user tries to access the login page, redirect them to the callbackUrl (previous page or set route)
+      // If authenticated user tries to access the login page, redirect them to the callbackUrl (previous page or set route)
       if (isLoggedIn && isOnLoginPage) {
-        // console.log(callbackUrl, "callbackUrl________________________________");
-        // const redirectUrl = new URL(callbackUrl, origin); // Redirect to the correct page
-        return NextResponse.redirect(new URL("/products", nextUrl)); // Redirect to the correct route after login
-      }
-      if (isOnsignupPage && isOnLoginPage) {
         // console.log(callbackUrl, "callbackUrl________________________________");
         // const redirectUrl = new URL(callbackUrl, origin); // Redirect to the correct page
         return NextResponse.redirect(new URL("/products", nextUrl)); // Redirect to the correct route after login
