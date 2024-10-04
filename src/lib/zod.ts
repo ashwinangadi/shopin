@@ -31,3 +31,14 @@ export const resetPasswordSchema = object({
     .min(1, "Email is required")
     .email("Invalid email"),
 });
+
+export const newPasswordSchema = object({
+  newPassword: string({ required_error: "New password is required" })
+    .min(1, "New password is required")
+    .min(8, "Password must be more than 8 characters")
+    .max(32, "Password must be less than 32 characters"),
+  confirmNewPassword: string({ required_error: "Confirm new password is required" }),
+}).refine((data) => data.newPassword === data.confirmNewPassword, {
+  path: ["confirmNewPassword"], // Points to where the error will be displayed
+  message: "Passwords must match",
+});

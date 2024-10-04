@@ -15,50 +15,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { resetPasswordSchema } from "@/lib/zod";
+import { newPasswordSchema } from "@/lib/zod";
 import { toast } from "sonner";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import { Input } from "../ui/input";
 import AuthRouting from "./auth-routing";
-import { getUser, getUserInClient } from "@/lib/actions";
+import { getUser, getUserInClient, resetPassword } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import User from "@/models/userModel";
 
-const ResetPassword = () => {
+const NewPassword = ({ token }: { token: string }) => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof resetPasswordSchema>>({
-    resolver: zodResolver(resetPasswordSchema),
+  const form = useForm<z.infer<typeof newPasswordSchema>>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      email: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
   });
-
-  const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
+  console.log("token", token);
+  const onSubmit = async (values: z.infer<typeof newPasswordSchema>) => {
     try {
-      const user = await getUserInClient(values.email);
-      if (!user) {
-        toast.error("User not found");
+      const response = await resetPassword(token, values.newPassword);
+      if (response?.success) {
+        toast.success(response.message + ", Redirecting to login page in 4 seconds...");
       } else {
-        const res = await axios.post("/api/mail", {
-          email: user?.email,
-          emailType: "RESET",
-          userId: user?._id,
-        });
-        console.log("before promise", res);
-        toast.success(
-          `Password reset link sent to your email, Redirecting to login page in 4 seconds...`
-        );
-        setTimeout(() => {
-          router.push("/login"); // Redirect to login page after 5 seconds
-        }, 4000);
+        toast.error(response?.error);
       }
-      console.log(user);
-    } catch (error:any) {
-      form.setError("root", {
-        type: "manual",
-        message: `${error.response.data.error}`,
-      });
+      setTimeout(() => {
+        router.push("/login"); // Redirect to login page after 5 seconds
+      }, 4000);
+    } catch (error) {
       toast.error("Failed to reset password");
       throw error;
     }
@@ -87,14 +75,32 @@ const ResetPassword = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>New Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="email"
-                        placeholder="Enter your email address"
+                        type="password"
+                        placeholder="Enter your new password"
+                        autoComplete="on"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmNewPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Re-enter your new password"
                         autoComplete="on"
                         {...field}
                       />
@@ -109,14 +115,13 @@ const ResetPassword = () => {
                 disabled={
                   form.formState.isSubmitting ||
                   (!!form.formState.errors && form.formState.isSubmitSuccessful)
-                  // form.formState.isSubmitted
                 }
                 className="w-full mt-4"
               >
                 {form.formState.isSubmitting ? (
                   <span className="flex items-center justify-center">
                     <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                    Sending Reset Password Email...
+                    Resetting Password...
                   </span>
                 ) : (
                   <>
@@ -129,23 +134,10 @@ const ResetPassword = () => {
               </Button>
             </form>
           </Form>
-
-          <div>
-            <AuthRouting
-              message="Remember your password?"
-              routeTo="/login"
-              routeMessage="Login here"
-            />
-            <AuthRouting
-              message="Don't have an account yet?"
-              routeTo="/signup"
-              routeMessage="Sign Up here"
-            />
-          </div>
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default ResetPassword;
+export default NewPassword;

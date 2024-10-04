@@ -154,3 +154,50 @@ export async function getUser(email: string): Promise<any | undefined> {
     throw new Error("Failed to fetch user.");
   }
 }
+export async function getUserInClient(email: string): Promise<any | undefined> {
+  await connectToMongoDB();
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return { error: "User not found", status: 404 };
+    }
+
+    if (email === user.email) {
+      return { email: user.email, _id: user._id, success: true };
+    }
+  } catch (error) {
+    return { error: "Failed to fetch user.", status: 500 };
+  }
+}
+
+export async function resetPassword(token: string, newPassword?: string) {
+  try {
+    await connectToMongoDB();
+
+    const user = await User.findOne({
+      forgotPasswordToken: token,
+      forgotPasswordTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return { error: "Invalid Link", status: 400 };
+    }
+    if (user && !newPassword) {
+      return { message: "Valid Token.", success: true };
+    }
+    if (user && newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(newPassword, salt);
+      user.password = hash;
+      user.forgotPasswordToken = undefined;
+      user.forgotPasswordTokenExpiry = undefined;
+
+      await user.save();
+
+      return { message: "Password reset successfully.", success: true };
+    }
+  } catch (error: any) {
+    return { error: error.message, status: 500 };
+  }
+}
