@@ -52,19 +52,14 @@ export function SignupForm() {
         toast.promise(res, {
           loading: "Sending verification email...",
           success: (response) => {
-            return `Account created successfully! Please check your email to verify your account, Redirecting to login page...`;
+            setTimeout(() => {
+              router.push("/login"); // Redirect to login page after 5 seconds
+            }, 4000);
+            return `Account created successfully! Please check your email to verify your account, Redirecting to login page in 4 seconds...`;
           },
           error:
             "Account created successfully! Failed to send verification email.",
         });
-
-        // toast.success(
-        //   "Account created successfully! Please check your email to verify your account."
-        // );
-        // toast.success("Redirecting to login page in 5 seconds...");
-        setTimeout(() => {
-          router.push("/login"); // Redirect to login page after 5 seconds
-        }, 8000);
       } else {
         // Handle specific error cases
         if (result.error === "Email already exists") {
@@ -102,7 +97,7 @@ export function SignupForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 gap-5">
+    <div className="flex flex-col items-center justify-center min-h-screen m-1 gap-5">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center ">

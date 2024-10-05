@@ -56,7 +56,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 gap-5">
+    <div className="flex flex-col items-center justify-center min-h-screen m-1 gap-5">
       <span className="text-center text-sm bg-yellow-50 w-full p-4 border rounded-md">
         <p className="text-base font-bold mb-2">Dummy Credentials</p>
         <p>email: john@example.com</p>
@@ -131,7 +131,7 @@ export function LoginForm() {
                 type="submit"
                 disabled={
                   form.formState.isSubmitting ||
-                  form.formState.isSubmitSuccessful
+                  form.formState.isSubmitSuccessful 
                 }
                 className="w-full mt-4"
               >

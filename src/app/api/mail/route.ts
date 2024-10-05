@@ -8,6 +8,7 @@ export async function POST(request: Request) {
     const { email, emailType, userId } = await request.json();
 
     const hashedToken = await bcrypt.hash(userId.toString(), 10);
+    const encodedHash = encodeURIComponent(hashedToken);
 
     if (emailType === "VERIFY") {
       const userVERIFY = await User.findByIdAndUpdate(userId, {
@@ -34,13 +35,16 @@ export async function POST(request: Request) {
       },
     });
 
+    const resetPasswordUrl = `${process.env.DOMAIN}/reset-password/${encodedHash}`;
+    const verifyEmailUrl = `${process.env.DOMAIN}/verify-email/?token=${hashedToken}`;
+
     const mailOptions = {
       from: "ashwin.angadi1@gmail.com", // sender address
       to: email, // list of receivers
       subject:
         emailType === "VERIFY" ? "Verify your email" : "Reset your password", // Subject line
       //   text: "Hello world?", // plain text body
-      html: `<p>Click <a href="${process.env.DOMAIN}/verify-email?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/verify-email?token=${hashedToken} </p>`,
+      html: `<p>Click <a href="${emailType === "VERIFY" ? verifyEmailUrl : resetPasswordUrl}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy and paste the link below in your browser. <br> ${emailType === "VERIFY" ? verifyEmailUrl : resetPasswordUrl}</p>`,
     };
 
     await transport.sendMail(mailOptions);
@@ -49,7 +53,7 @@ export async function POST(request: Request) {
       { message: "Message sent successfully" },
       { status: 200 }
     );
-  } catch (error) {
-    return new NextResponse("Failed to send message.", { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: "User does not exist!" }, { status: 500 });
   }
 }
