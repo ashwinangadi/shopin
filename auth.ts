@@ -5,7 +5,6 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { signInSchema } from "@/lib/zod";
-import User from "@/models/userModel";
 import { getUser } from "@/lib/actions";
 import { revalidatePath } from "next/cache";
 // import { NextResponse } from "next/server";

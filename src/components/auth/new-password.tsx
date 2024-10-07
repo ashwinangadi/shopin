@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,11 +18,9 @@ import { newPasswordSchema } from "@/lib/zod";
 import { toast } from "sonner";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import { Input } from "../ui/input";
-import AuthRouting from "./auth-routing";
-import { getUser, getUserInClient, resetPassword } from "@/lib/actions";
+import { resetPassword } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import User from "@/models/userModel";
+
 
 const NewPassword = ({ token }: { token: string }) => {
   const router = useRouter();

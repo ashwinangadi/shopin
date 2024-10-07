@@ -23,7 +23,6 @@ import AuthRouting from "./auth-routing";
 import { getUser, getUserInClient } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import User from "@/models/userModel";
 
 const ResetPassword = () => {
   const router = useRouter();
