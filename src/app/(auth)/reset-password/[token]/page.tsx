@@ -7,7 +7,7 @@ import React from "react";
 const NewPasswordPage = async ({ params }: { params: { token: string } }) => {
   const { token } = params;
   const decodedHashToken = decodeURIComponent(token);
-  console.log(decodedHashToken);
+  // console.log(decodedHashToken);
   const response = await resetPassword(decodedHashToken);
   return (
     <section className="flex items-center justify-center md:h-screen">

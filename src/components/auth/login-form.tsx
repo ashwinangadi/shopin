@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { authenticate, googleAuthenticate } from "@/lib/actions";
+import { authenticate, githubAuthenticate, googleAuthenticate } from "@/lib/actions";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -53,6 +53,7 @@ export function LoginForm() {
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -179,6 +180,14 @@ export function LoginForm() {
             >
               {" "}
               Sign In with Google
+            </Button>
+            <Button
+              variant={"outline"}
+              className="w-full mt-4"
+              onClick={() => githubAuthenticate()}
+            >
+              {" "}
+              Sign In with Github
             </Button>
           </div>
         </CardContent>

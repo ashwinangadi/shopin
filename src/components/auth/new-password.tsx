@@ -31,7 +31,7 @@ const NewPassword = ({ token }: { token: string }) => {
       confirmNewPassword: "",
     },
   });
-  console.log("token", token);
+  // console.log("token", token);
   const onSubmit = async (values: z.infer<typeof newPasswordSchema>) => {
     try {
       const response = await resetPassword(token, values.newPassword);

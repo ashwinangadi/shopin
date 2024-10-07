@@ -28,7 +28,7 @@ export function ImageCarousel({ images }: { images: string[] }) {
       return;
     }
 
-    console.log(api.scrollSnapList().length);
+    // console.log(api.scrollSnapList().length);
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
 
@@ -37,7 +37,7 @@ export function ImageCarousel({ images }: { images: string[] }) {
     });
   }, [api]);
 
-  console.log(images);
+  // console.log(images);
 
   return (
     // <div className="">

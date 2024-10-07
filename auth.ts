@@ -7,11 +7,12 @@ import { createUser, getUser } from "@/lib/actions";
 import { revalidatePath } from "next/cache";
 // import { NextResponse } from "next/server";
 import Google from "next-auth/providers/google";
-import axios from "axios";
+import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
+    GitHub,
     Credentials({
       authorize: async (credentials) => {
         const validatedFields = signInSchema.safeParse(credentials);
@@ -62,11 +63,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
     async jwt({ token, user, account }) {
-      console.log("token___________________", token);
       if (user) {
         token.id = user.id;
       }
-      if (account && account.provider === "google") {
+      if (
+        account &&
+        (account.provider === "google" || account.provider === "github")
+      ) {
         token.accessToken = account.access_token;
 
         // Check if the user exists in the database
@@ -74,7 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!existingUser && token) {
           // If the user doesn't exist, create a new user
           const newUser = await createUser({
-            username: token?.email ?? "", // Add a fallback empty string
+            username: token?.email?.split("@")[0] ?? "", // Add a fallback empty string
             email: token?.email ?? "", // Also add a fallback here for consistency
             password: Array.from(crypto.getRandomValues(new Uint8Array(10)))
               .map(
