@@ -22,7 +22,7 @@ const SimilarProducts = ({ catagory, productId }: any) => {
 
   const similarProducts = useMemo(
     () => data?.products?.filter((item: any) => +item.id !== +productId),
-    [data?.products]
+    [data?.products, productId]
   );
 
   return (

@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/accordion";
 import FilterCard from "./FilterCard";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import PriceSlider from "./PriceSlider";
 import { DataList } from "@/types";
+import dynamic from "next/dynamic";
+
+const PriceSlider = dynamic(() => import("./PriceSlider"), { ssr: false });
 
 const Filter = ({ data }: { data: DataList }) => {
   const { replace } = useRouter();

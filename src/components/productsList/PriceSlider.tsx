@@ -57,12 +57,14 @@ const PriceSlider = ({ data }: { data: DataList }) => {
           </span>
         </div>
       ) : (
-        <Slider
-          defaultValue={[1, 10]}
-          min={1}
-          max={10}
-          // onValueCommit={handleSliderChange}
-        />
+        <div>
+          <Slider
+            defaultValue={[1, 10]}
+            min={1}
+            max={10}
+            // onValueCommit={handleSliderChange}
+          />
+        </div>
       )}
 
       <span className="text-sm font-medium flex items-center justify-center mt-1 gap-3">
