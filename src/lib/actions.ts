@@ -4,10 +4,10 @@ import { AuthError } from "next-auth";
 import { signIn } from "../../auth";
 import { signInSchema, signUpSchema } from "./zod";
 
-import User from "@/models/userModel"; // Assuming the User model is defined similarly to the Todo model
+import User from "@/models/userModel";
 import { revalidatePath } from "next/cache";
 import { connectToMongoDB } from "./db";
-import bcrypt from "bcryptjs"; // Make sure bcrypt is installed (npm install bcrypt)
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 
 export async function authenticate({
@@ -46,12 +46,26 @@ export async function authenticate({
   }
 }
 
+export async function googleAuthenticate(
+  prevState?: string | undefined,
+  formData?: FormData
+) {
+  try {
+    await signIn("google", { redirectTo: "/products" });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return "google log in failed";
+    }
+    throw error;
+  }
+}
+
 // Function to create a new user
 export const createUser = async (values: z.infer<typeof signUpSchema>) => {
   try {
     await connectToMongoDB();
 
-    const { username, email, password } = values;
+    const { username, email, password, picture } = values;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -60,6 +74,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
       username,
       email,
       password: hash,
+      picture,
     });
     const savedUser = await newUser.save();
 
@@ -70,6 +85,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
         _id: savedUser?._id?.toString(),
         username: savedUser.username,
         email: savedUser.email,
+        picture: savedUser.picture,
         isVerified: savedUser.isVerified,
         createdAt: savedUser.createdAt,
         updatedAt: savedUser.updatedAt,

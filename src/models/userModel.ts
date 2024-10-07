@@ -6,6 +6,7 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
+  picture?: string;
   isVerified: boolean;
   forgotPasswordToken: String | undefined;
   forgotPasswordTokenExpiry: Date | undefined;
@@ -44,6 +45,10 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    picture: {
+      type: String,
+      default: null,
     },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,

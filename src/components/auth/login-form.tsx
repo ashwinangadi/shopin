@@ -19,11 +19,12 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { authenticate } from "@/lib/actions";
+import { authenticate, googleAuthenticate } from "@/lib/actions";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import AuthRouting from "./auth-routing";
+import { signIn } from "../../../auth";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -131,7 +132,7 @@ export function LoginForm() {
                 type="submit"
                 disabled={
                   form.formState.isSubmitting ||
-                  form.formState.isSubmitSuccessful 
+                  form.formState.isSubmitSuccessful
                 }
                 className="w-full mt-4"
               >
@@ -171,6 +172,14 @@ export function LoginForm() {
               routeTo="/signup"
               routeMessage="Sign Up here"
             />
+            <Button
+              variant={"outline"}
+              className="w-full mt-4"
+              onClick={() => googleAuthenticate()}
+            >
+              {" "}
+              Sign In with Google
+            </Button>
           </div>
         </CardContent>
       </Card>
