@@ -17,7 +17,7 @@ import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 const ProductsPage = () => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy") || "title";
+  const sortBy = searchParams.get("sortBy") || "price";
   const orderBy = searchParams.get("order") || "asc";
   const searchQuery = searchParams.get("query");
   const limit = Number(searchParams.get("limit")) || LIMIT;
