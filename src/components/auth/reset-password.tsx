@@ -44,7 +44,7 @@ const ResetPassword = () => {
           emailType: "RESET",
           userId: user?._id,
         });
-        console.log("before promise", res);
+        // console.log("before promise", res);
         toast.success(
           `Password reset link sent to your email, Redirecting to login page in 4 seconds...`
         );
@@ -52,7 +52,7 @@ const ResetPassword = () => {
           router.push("/login"); // Redirect to login page after 5 seconds
         }, 4000);
       }
-      console.log(user);
+      // console.log(user);
     } catch (error:any) {
       form.setError("root", {
         type: "manual",
