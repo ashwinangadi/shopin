@@ -54,7 +54,21 @@ export async function googleAuthenticate(
     await signIn("google", { redirectTo: "/products" });
   } catch (error) {
     if (error instanceof AuthError) {
-      return "google log in failed";
+      return "Google log in failed";
+    }
+    throw error;
+  }
+}
+
+export async function githubAuthenticate(
+  prevState?: string | undefined,
+  formData?: FormData
+) {
+  try {
+    await signIn("github", { redirectTo: "/products" });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return "Github log in failed";
     }
     throw error;
   }
