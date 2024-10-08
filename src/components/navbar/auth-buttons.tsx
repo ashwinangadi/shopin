@@ -1,30 +1,77 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { auth, signIn, signOut } from "../../../auth";
-import { Power } from "lucide-react";
+import { ArchiveRestore, CircleUser, Heart, Power } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const AuthButtons = async () => {
   const session = await auth();
-
+  const userName = session?.user?.name;
+  const userImage = session?.user?.image;
   return (
     <span className="flex items-center gap-2">
       {!session?.user ? (
         <Link href={`/login`}>
-          <Button variant={"secondary"}> SignIn</Button>
+          <Button variant={"secondary"}> Login</Button>
         </Link>
       ) : (
-        <form
-          action={async () => {
-            "use server";
-            await signOut();
-          }}
-        >
-          <Button variant={"secondary"}>
-            {" "}
-            <Power className="w-3.5 me-2" /> Logout
-          </Button>
-        </form>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full">
+              <Avatar>
+                <AvatarImage src={userImage as string} />
+                <AvatarFallback>
+                  {userName?.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+              <DropdownMenuItem>
+                <CircleUser className="w-3.5 me-2 stroke-white fill-primary " />{" "}
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <ArchiveRestore className="w-3 me-2 stroke-primary fill-primary" />{" "}
+                Orders
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem>
+                <Heart className="w-3 me-2 stroke-primary fill-primary" />{" "}
+                Wishlist
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem>
+                <Power className="w-3 me-2 stroke-primary" />
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut();
+                  }}
+                >
+                  <Button
+                    variant={"ghost"}
+                    className="w-full h-0 text-left font-normal px-0"
+                  >
+                    {" "}
+                    Logout
+                  </Button>
+                </form>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )}
     </span>
   );
