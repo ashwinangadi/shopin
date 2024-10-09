@@ -1,5 +1,6 @@
 // Importing mongoose library along with Document and Model types from it
 import mongoose, { Document, Model } from "mongoose";
+import { IWishlistItem, wishlistItemSchema } from "./userWishlist";
 
 // Defining the structure of a user using TypeScript interfaces
 export interface IUser {
@@ -12,6 +13,7 @@ export interface IUser {
   forgotPasswordTokenExpiry: Date | undefined;
   verifyToken: String | undefined;
   verifyTokenExpiry: Date | undefined;
+  wishlist?: IWishlistItem[]; // Wishlist field
 }
 
 // Merging IUser interface with mongoose's Document interface to create
@@ -49,6 +51,10 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     picture: {
       type: String,
       default: null,
+    },
+    wishlist: {
+      type: [wishlistItemSchema],
+      default: [], // Initialize wishlist as an empty array
     },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
