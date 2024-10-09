@@ -5,11 +5,13 @@ import { signIn } from "../../auth";
 import { signInSchema, signUpSchema } from "./zod";
 
 import User from "@/models/userModel";
-import { revalidatePath } from "next/cache";
 import { connectToMongoDB } from "./db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
+//____________________________________________________________________AUTHENTICATION START______________________________________________________________________
+
+// Function to authenticate a user
 export async function authenticate({
   params,
   values,
@@ -46,6 +48,7 @@ export async function authenticate({
   }
 }
 
+// Function to authenticate a user with Google
 export async function googleAuthenticate(
   prevState?: string | undefined,
   formData?: FormData
@@ -60,6 +63,7 @@ export async function googleAuthenticate(
   }
 }
 
+// Function to authenticate a user with Github
 export async function githubAuthenticate(
   prevState?: string | undefined,
   formData?: FormData
@@ -73,6 +77,10 @@ export async function githubAuthenticate(
     throw error;
   }
 }
+
+//____________________________________________________________________AUTHENTICATION END______________________________________________________________________
+
+//____________________________________________________________________USER MANAGEMENT START___________________________________________________________________
 
 // Function to create a new user
 export const createUser = async (values: z.infer<typeof signUpSchema>) => {
@@ -125,6 +133,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
   }
 };
 
+// Function to verify a user's email
 export async function verifyEmail(token: string) {
   try {
     const user = await User.findOne({
@@ -169,6 +178,7 @@ export const deleteUser = async (id: FormData) => {
   }
 };
 
+// Function to get a user by email
 export async function getUser(email: string): Promise<any | undefined> {
   try {
     const user = await User.findOne({ email });
@@ -184,6 +194,8 @@ export async function getUser(email: string): Promise<any | undefined> {
     throw new Error("Failed to fetch user.");
   }
 }
+
+// Function to get a user by email in the client
 export async function getUserInClient(email: string): Promise<any | undefined> {
   await connectToMongoDB();
   try {
@@ -201,6 +213,7 @@ export async function getUserInClient(email: string): Promise<any | undefined> {
   }
 }
 
+// Function to reset a user's password
 export async function resetPassword(token: string, newPassword?: string) {
   try {
     await connectToMongoDB();
@@ -231,3 +244,49 @@ export async function resetPassword(token: string, newPassword?: string) {
     return { error: error.message, status: 500 };
   }
 }
+
+//____________________________________________________________________USER MANAGEMENT END___________________________________________________________________
+
+//____________________________________________________________________WISHLIST MANAGEMENT START______________________________________________________________________
+
+// Function to add a product to the user's wishlist
+export async function addToWishlist(userId: string, product: any) {
+  try {
+    await connectToMongoDB();
+
+    // Find the user by ID and update their wishlist
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $push: { wishlist: product } },
+      { new: true }
+    );
+
+    return { message: "Product added to wishlist", success: true };
+  } catch (error) {
+    return { message: "Failed to add product to wishlist", success: false };
+  }
+}
+
+// Function to remove a product from the user's wishlist
+export async function removeFromWishlist(userId: string, productId: number) {
+  try {
+    await connectToMongoDB();
+
+    // Find the user by ID and update their wishlist
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { wishlist: { id: productId } } },
+      { new: true }
+    );
+
+    return { message: "Product removed from wishlist", success: true };
+  } catch (error) {
+    return {
+      message: "Failed to remove product from wishlist",
+      success: false,
+    };
+  }
+}
+
+
+//____________________________________________________________________WISHLIST MANAGEMENT END______________________________________________________________________

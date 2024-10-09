@@ -41,6 +41,7 @@ export type ProductCardProps = {
   thumbnail: string;
   title: string;
   brand: string;
+  stock: number;
   rating: number;
   price: number;
   discountPercentage: number;

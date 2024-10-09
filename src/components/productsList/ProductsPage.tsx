@@ -164,6 +164,7 @@ const ProductsPage = () => {
                             thumbnail={item.thumbnail}
                             title={item.title}
                             brand={item.brand}
+                            stock={item.stock}
                             rating={item.rating}
                             price={item.price}
                             discountPercentage={item.discountPercentage}

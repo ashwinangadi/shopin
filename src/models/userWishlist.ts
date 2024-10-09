@@ -3,8 +3,8 @@ import mongoose, { Document, Model } from "mongoose";
 
 // Interface for wishlist item
 export interface IWishlistItem {
-  id: string;
-  name: string;
+  id: number;
+  title: string;
   price: number;
   thumbnail: string;
   rating: number;
@@ -15,10 +15,10 @@ export interface IWishlistItem {
 export const wishlistItemSchema = new mongoose.Schema<IWishlistItem>(
   {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
-    name: {
+    title: {
       type: String,
       required: true,
     },

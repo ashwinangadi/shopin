@@ -9,12 +9,22 @@ const ProductCard = ({
   thumbnail,
   title,
   brand,
+  stock,
   rating,
   price,
   discountPercentage,
   shippingInformation,
   returnPolicy,
 }: ProductCardProps) => {
+  const product = {
+    id,
+    title,
+    price,
+    thumbnail,
+    rating,
+    stock,
+  };
+
   return (
     <div
       key={id}
@@ -27,7 +37,9 @@ const ProductCard = ({
         height={200}
         className="mx-auto"
       />
-      <AddToWishlist />
+
+      <AddToWishlist product={product} />
+
       <div className="p-3 space-y-2">
         <div className="flex flex-col -space-y-1">
           <p className="">
