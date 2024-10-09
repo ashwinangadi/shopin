@@ -1,12 +1,10 @@
 import React, { Suspense } from "react";
-import { Button } from "../ui/button";
 import CategoriesList from "../catagories-list/CategoriesList";
 import Search from "../search/Search";
-import { Loader, Power, ShoppingCart } from "lucide-react";
+import { Loader, ShoppingCart } from "lucide-react";
 import Logo from "./Logo";
 import Link from "next/link";
-import { signIn, signOut } from "../../../auth";
-import AuthButtons from "./auth-buttons";
+import AccountDropdown from "./account-dropdown";
 
 const Navbar = () => {
   return (
@@ -24,7 +22,7 @@ const Navbar = () => {
           </Suspense>
         </span>
         <div className="flex items-center gap-3">
-          <AuthButtons />
+          <AccountDropdown />
 
           <Link href={`/cart`}>
             <ShoppingCart className="h-8 w-8" />

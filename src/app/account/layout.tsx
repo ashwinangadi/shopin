@@ -16,7 +16,7 @@ export default function RootLayout({
   //   queryClient.prefetchQuery(categoryListOptions);
   //   connectToMongoDB()
   return (
-    <section className=" min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-64px)] mt-24 md:mt-16">
+    <section className="container min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-64px)] mt-24 md:mt-16">
       {children}
     </section>
   );

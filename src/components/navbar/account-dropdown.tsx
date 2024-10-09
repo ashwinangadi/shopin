@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const AuthButtons = async () => {
+const AccountDropdown = async () => {
   const session = await auth();
   const userName = session?.user?.name;
   const userImage = session?.user?.image;
@@ -20,7 +20,7 @@ const AuthButtons = async () => {
     <span className="flex items-center gap-2">
       {!session?.user ? (
         <Link href={`/login`}>
-          <Button variant={"secondary"}> Login</Button>
+          <Button variant={"secondary"}>Login</Button>
         </Link>
       ) : (
         <>
@@ -35,21 +35,26 @@ const AuthButtons = async () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-              <DropdownMenuItem>
-                <CircleUser className="w-3.5 me-2 stroke-white fill-primary " />{" "}
-                My Profile
-              </DropdownMenuItem>
+              <Link href={`/account`}>
+                <DropdownMenuItem>
+                  <CircleUser className="w-3.5 me-2 stroke-white fill-primary " />{" "}
+                  My Profile
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <ArchiveRestore className="w-3 me-2 stroke-primary fill-primary" />{" "}
-                Orders
-              </DropdownMenuItem>
+              <Link href={`/account/orders`}>
+                <DropdownMenuItem>
+                  <ArchiveRestore className="w-3 me-2 stroke-primary fill-primary" />{" "}
+                  Orders
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
-
-              <DropdownMenuItem>
-                <Heart className="w-3 me-2 stroke-primary fill-primary" />{" "}
-                Wishlist
-              </DropdownMenuItem>
+              <Link href={`/account/wishlist`}>
+                <DropdownMenuItem>
+                  <Heart className="w-3 me-2 stroke-primary fill-primary" />{" "}
+                  Wishlist
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
 
               <DropdownMenuItem>
@@ -62,7 +67,7 @@ const AuthButtons = async () => {
                 >
                   <Button
                     variant={"ghost"}
-                    className="w-full h-0 text-left font-normal px-0"
+                    className="w-full h-0 text-left font-normal px-0 cursor-default"
                   >
                     {" "}
                     Logout
@@ -77,4 +82,4 @@ const AuthButtons = async () => {
   );
 };
 
-export default AuthButtons;
+export default AccountDropdown;
