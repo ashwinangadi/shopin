@@ -43,7 +43,7 @@ export const wishlistItemSchema = new mongoose.Schema<IWishlistItem>(
 );
 
 // Defining a mongoose model for the wishlist item
-const WishlistItem = mongoose.model<IWishlistItem>("WishlistItem", wishlistItemSchema);
+// const WishlistItem = mongoose.model<IWishlistItem>("WishlistItem", wishlistItemSchema);
 
 // Exporting the WishlistItem model
-export default WishlistItem;
+// export default WishlistItem;
