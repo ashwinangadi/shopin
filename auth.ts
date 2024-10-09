@@ -45,7 +45,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const callbackUrl =
         nextUrl.searchParams.get("callbackUrl") || nextUrl.pathname; // Default to current page
 
-      const ProtectedRoutes = ["/cart"];
+      const ProtectedRoutes = [
+        "/account",
+        "/account/orders",
+        "/account/wishlist",
+      ];
 
       // Get the origin (protocol + host) to form absolute URLs
       const origin = nextUrl.origin;
