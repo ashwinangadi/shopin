@@ -48,6 +48,7 @@ const SimilarProducts = ({ catagory, productId }: any) => {
                           discountPercentage={item.discountPercentage}
                           shippingInformation={item.shippingInformation}
                           returnPolicy={item.returnPolicy}
+                          stock={item.stock}
                         />
                       </Link>
                     );

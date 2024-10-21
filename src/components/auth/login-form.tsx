@@ -19,12 +19,18 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { authenticate, githubAuthenticate, googleAuthenticate } from "@/lib/actions";
+import {
+  authenticate,
+  githubAuthenticate,
+  googleAuthenticate,
+} from "@/lib/actions";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import AuthRouting from "./auth-routing";
 import { signIn } from "../../../auth";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -61,8 +67,18 @@ export function LoginForm() {
     <div className="flex flex-col items-center justify-center min-h-screen m-1 gap-5">
       <span className="text-center text-sm bg-yellow-50 w-full p-4 border rounded-md">
         <p className="text-base font-bold mb-2">Dummy Credentials</p>
-        <p>email: john@example.com</p>
-        <p>password: password123</p>
+        <p
+          onClick={() => form.setValue("email", "john@example.com")}
+          className="cursor-pointer hover:underline"
+        >
+          email: john@example.com
+        </p>
+        <p
+          onClick={() => form.setValue("password", "password123")}
+          className="cursor-pointer hover:underline"
+        >
+          password: password123
+        </p>
         <p className="mt-2">
           <span className="font-bold">Note:</span>{" "}
           <Link href="/signup">
@@ -175,19 +191,21 @@ export function LoginForm() {
             />
             <Button
               variant={"outline"}
-              className="w-full mt-4"
+              className="w-full mt-4 flex items-center justify-center gap-2"
               onClick={() => googleAuthenticate()}
             >
               {" "}
-              Sign In with Google
+              <Image src="/google.png" alt="google" width={20} height={20} />
+              SignIn with Google
             </Button>
             <Button
               variant={"outline"}
-              className="w-full mt-4"
+              className="w-full mt-4 flex items-center justify-center gap-1"
               onClick={() => githubAuthenticate()}
             >
               {" "}
-              Sign In with Github
+              <GitHubLogoIcon className="h-4 w-4 mr-2" />
+              SignIn with Github
             </Button>
           </div>
         </CardContent>
