@@ -16,7 +16,9 @@ const Sidebar = async () => {
       <div className="flex items-center gap-4 bg-white rounded-md md:border p-3">
         <Avatar>
           <AvatarImage src={userImage as string} />
-          <AvatarFallback>{userName?.slice(0, 2).toUpperCase()}</AvatarFallback>
+          <AvatarFallback className=" text-primary">
+            {userName?.slice(0, 2).toUpperCase()}
+          </AvatarFallback>
         </Avatar>
         <div>
           <p className="text-xs font-medium">Hello,</p>
@@ -55,7 +57,6 @@ const Sidebar = async () => {
         <div className=" w-full hidden md:block">
           <Separator className="w-full" />
           <LogoutButton className="w-full text-left hover:text-primary text-base text-gray-500 font-medium px-0 mt-2" />
-
         </div>
       </div>
     </div>

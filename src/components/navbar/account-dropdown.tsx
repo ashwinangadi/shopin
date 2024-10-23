@@ -29,7 +29,7 @@ const AccountDropdown = async () => {
             <DropdownMenuTrigger className="rounded-full">
               <Avatar>
                 <AvatarImage src={userImage as string} />
-                <AvatarFallback>
+                <AvatarFallback className=" text-primary">
                   {userName?.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
