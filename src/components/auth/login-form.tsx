@@ -24,18 +24,16 @@ import {
   githubAuthenticate,
   googleAuthenticate,
 } from "@/lib/actions";
-import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import AuthRouting from "./auth-routing";
-import { signIn } from "../../../auth";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+
 
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  // console.log("searchParams________________",searchParams.get("callbackUrl"));
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -58,7 +56,7 @@ export function LoginForm() {
         toast.success("Login successful!");
       }
     } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
+      console.log(error);
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
