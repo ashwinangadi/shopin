@@ -14,7 +14,7 @@ import { Product } from "@/types";
 import Link from "next/link";
 import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
-const ProductsPage = () => {
+const ProductsPage = ({ userId }: { userId: string | undefined }) => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
   const sortBy = searchParams.get("sortBy") || "price";
@@ -160,6 +160,7 @@ const ProductsPage = () => {
                       return (
                         <Link href={`/products/${item.id}`} key={item.id}>
                           <ProductCard
+                            userId={userId}
                             id={item.id}
                             thumbnail={item.thumbnail}
                             title={item.title}

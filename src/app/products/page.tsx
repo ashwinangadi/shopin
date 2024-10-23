@@ -1,13 +1,14 @@
 import ProductsPage from "@/components/productsList/ProductsPage";
 import { getQueryClient } from "@/providers/get-query-client";
 import { getProducts } from "@/utils/api/api";
-
+import { auth } from "../../../auth";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
-export default function ProductHome() {
+export default async function ProductHome() {
   const queryClient = getQueryClient();
+  const session = await auth();
 
   queryClient.prefetchQuery({
     queryKey: ["products", null, "title", "asc", 0, null],
@@ -19,7 +20,7 @@ export default function ProductHome() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         {/* <p className="">Page.tsx</p> */}
         <Suspense fallback={<Loader className="w-5 h-5 animate-spin" />}>
-          <ProductsPage />
+          <ProductsPage userId={session?.user?.id} />
         </Suspense>
       </HydrationBoundary>
     </section>

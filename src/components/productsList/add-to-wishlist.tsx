@@ -1,5 +1,4 @@
 import { Heart } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { IWishlistItem } from "@/models/userWishlist";
 import { addToWishlist, removeFromWishlist } from "@/lib/actions";
 import { useRouter } from "next/navigation";
@@ -7,19 +6,17 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const AddToWishlist = ({ product }: { product: IWishlistItem }) => {
+const AddToWishlist = ({
+  userId,
+  product,
+}: {
+  userId: string | undefined;
+  product: IWishlistItem;
+}) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-
-  const {
-    data: wishlistData,
-    isLoading,
-    error,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ["wishlist"],
+  // TODO: when clicked on the heart, it re-renders as many times as products.length, fix it
+  const { data: wishlistData, refetch } = useQuery({
+    queryKey: ["wishlist", userId],
     queryFn: async () =>
       await axios.post("/api/wishlist/getwishlist", { userId }),
     enabled: !!userId,
@@ -57,7 +54,7 @@ const AddToWishlist = ({ product }: { product: IWishlistItem }) => {
 
   return (
     <Heart
-      className={`z-50 absolute h-5 w-5 ${
+      className={`z-10 absolute h-5 w-5 ${
         isInWishlist ? "fill-red-500" : "fill-gray-200"
       } stroke-slate-400 top-2 right-2 hover:cursor-pointer`}
       onClick={(e) => {

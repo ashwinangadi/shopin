@@ -5,6 +5,7 @@ import React from "react";
 import AddToWishlist from "./add-to-wishlist";
 
 const ProductCard = ({
+  userId,
   id,
   thumbnail,
   title,
@@ -38,7 +39,7 @@ const ProductCard = ({
         className="mx-auto"
       />
 
-      <AddToWishlist product={product} />
+      <AddToWishlist userId={userId} product={product} />
 
       <div className="p-3 space-y-2">
         <div className="flex flex-col -space-y-1">

@@ -37,6 +37,7 @@ export type Product = {
 };
 
 export type ProductCardProps = {
+  userId: string | undefined;
   id: number;
   thumbnail: string;
   title: string;

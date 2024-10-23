@@ -9,7 +9,13 @@ import { Review } from "@/types";
 import { Button } from "../ui/button";
 import ProductDetailShimmer from "../shimmer/ProductDetailShimmer";
 
-const ProductDetailsPage = ({ productId }: { productId: string }) => {
+const ProductDetailsPage = ({
+  userId,
+  productId,
+}: {
+  userId: string | undefined;
+  productId: string;
+}) => {
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["productsDetails", productId],
     queryFn: () => getSingleProduct(productId),
@@ -160,7 +166,7 @@ const ProductDetailsPage = ({ productId }: { productId: string }) => {
           <ProductDetailShimmer />
         </div>
       )}
-      <SimilarProducts catagory={data?.category} productId={productId} />
+      <SimilarProducts userId={userId} catagory={data?.category} productId={productId} />
     </section>
   );
 };
