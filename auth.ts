@@ -25,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const passwordsMatch = bcrypt.compareSync(password, user.password);
 
           if (passwordsMatch) {
-            revalidatePath("/cart");
+            revalidatePath("/products");
             return user;
           }
         }
@@ -43,13 +43,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isLoggedIn = !!auth?.user;
       const isOnRootPage = nextUrl.pathname === "/"; // Check if on root page
       const callbackUrl =
-        nextUrl.searchParams.get("callbackUrl") || nextUrl.pathname; // Default to current page
+        nextUrl.searchParams.get("callbackUrl") || nextUrl.href; // Use full URL with params
 
       const ProtectedRoutes = [
         "/account",
         "/account/orders",
         "/account/wishlist",
       ];
+      const AuthPages = ["/login", "/signup", "/reset-password"];
 
       // Get the origin (protocol + host) to form absolute URLs
       const origin = nextUrl.origin;
@@ -60,8 +61,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (ProtectedRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         const loginUrl = new URL(`/login`, nextUrl);
-        loginUrl.searchParams.set("callbackUrl", `${nextUrl.pathname}`); // Store /cart as callbackUrl
+        loginUrl.searchParams.set("callbackUrl", callbackUrl); // Store /cart as callbackUrl
         return NextResponse.redirect(loginUrl);
+      }
+
+      if (isLoggedIn && AuthPages.includes(nextUrl.pathname)) {
+        return NextResponse.redirect(new URL(`${origin}/`, nextUrl));
       }
 
       return true;
