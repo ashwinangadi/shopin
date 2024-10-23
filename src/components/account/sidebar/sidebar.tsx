@@ -5,6 +5,7 @@ import { Button } from "../../ui/button";
 import { Separator } from "../../ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import LogoutButton from "@/components/auth/logout-button";
 
 const Sidebar = async () => {
   const session = await auth();
@@ -46,28 +47,15 @@ const Sidebar = async () => {
             href="/account/wishlist"
             className="hover:bg-accent p-2 rounded-md flex justify-center md:justify-start items-center hover:text-primary text-sm md:text-base text-gray-500 font-medium md:gap-2"
           >
-            <Heart className="w-4 md:w-5 me-2 stroke-primary fill-primary" /> Wishlist
+            <Heart className="w-4 md:w-5 me-2 stroke-primary fill-primary" />{" "}
+            Wishlist
           </Link>
         </div>
 
         <div className=" w-full hidden md:block">
           <Separator className="w-full" />
+          <LogoutButton className="w-full text-left hover:text-primary text-base text-gray-500 font-medium px-0 mt-2" />
 
-          <form
-            action={async () => {
-              "use server";
-              await signOut();
-            }}
-          >
-            <Button
-              variant={"ghost"}
-              className="w-full text-left hover:text-primary text-base text-gray-500 font-medium px-0 mt-2"
-            >
-              {" "}
-              <Power className="w-5 me-4 stroke-primary" />
-              Logout
-            </Button>
-          </form>
         </div>
       </div>
     </div>

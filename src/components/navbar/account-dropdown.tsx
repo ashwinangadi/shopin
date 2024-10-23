@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LogoutButton from "../auth/logout-button";
 
 const AccountDropdown = async () => {
   const session = await auth();
@@ -59,20 +60,7 @@ const AccountDropdown = async () => {
 
               <DropdownMenuItem>
                 <Power className="w-3 me-2 stroke-primary" />
-                <form
-                  action={async () => {
-                    "use server";
-                    await signOut();
-                  }}
-                >
-                  <Button
-                    variant={"ghost"}
-                    className="w-full h-0 text-left font-normal px-0 cursor-default"
-                  >
-                    {" "}
-                    Logout
-                  </Button>
-                </form>
+                <LogoutButton className="w-full h-0 text-left font-normal px-0 cursor-default" />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
