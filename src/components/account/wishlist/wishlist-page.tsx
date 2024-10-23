@@ -11,7 +11,6 @@ import Link from "next/link";
 import React from "react";
 
 const WishlistPage = ({ userId }: { userId: string | undefined }) => {
-  console.log("userId", userId);
   const {
     data: WishlistData,
     isLoading,
@@ -76,7 +75,7 @@ const WishlistPage = ({ userId }: { userId: string | undefined }) => {
                         </p>
                       </span>
                     </div>
-                    
+
                     <DeleteProduct
                       userId={userId}
                       productId={item.id}

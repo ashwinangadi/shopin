@@ -8,7 +8,6 @@ export async function POST(request: Request) {
   const reqBody = await request.json();
   const { userId } = reqBody;
   try {
-    console.log("userIdRoute", userId);
     const user = await User.findById(userId).select("wishlist");
     if (!user) {
       return NextResponse.json({
