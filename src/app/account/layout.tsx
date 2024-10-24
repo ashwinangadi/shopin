@@ -11,11 +11,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  //   const queryClient = getQueryClient();
-
-  //   // queryClient.prefetchQuery(dealsOptions);
-  //   queryClient.prefetchQuery(categoryListOptions);
-  //   connectToMongoDB()
   return (
     <section className=" grid md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] md:gap-2 container mx-auto min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-64px)] mt-24 md:mt-16 p-2">
       <Sidebar />

@@ -120,7 +120,9 @@ const ProductsPage = ({ userId }: { userId: string | undefined }) => {
                 Filter
               </DrawerTrigger>
               <DrawerContent>
-                <Suspense fallback={<Loader className="w-5 h-5 animate-spin" />}>
+                <Suspense
+                  fallback={<Loader className="w-5 h-5 animate-spin" />}
+                >
                   <Filter data={data} />
                 </Suspense>
               </DrawerContent>
