@@ -30,7 +30,6 @@ import AuthRouting from "./auth-routing";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 
-
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -189,11 +188,11 @@ export function LoginForm() {
             />
             <Button
               variant={"outline"}
-              className="w-full mt-4 flex items-center justify-center gap-2"
+              className="w-full mt-4 flex items-center justify-center gap-3"
               onClick={() => googleAuthenticate()}
             >
               {" "}
-              <Image src="/google.png" alt="google" width={20} height={20} />
+              <Image src="/google.png" alt="google" width={15} height={15} />
               SignIn with Google
             </Button>
             <Button
