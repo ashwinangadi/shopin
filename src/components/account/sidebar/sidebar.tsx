@@ -1,30 +1,16 @@
-import { ArchiveRestore, CircleUser, Heart, Power } from "lucide-react";
-import { auth, signOut } from "../../../../auth";
+import { ArchiveRestore, CircleUser, Heart } from "lucide-react";
 import React from "react";
-import { Button } from "../../ui/button";
 import { Separator } from "../../ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import LogoutButton from "@/components/auth/logout-button";
+import { UserInfo } from "./user-info";
+import { auth } from "../../../../auth";
 
 const Sidebar = async () => {
   const session = await auth();
-  const userName = session?.user?.name;
-  const userImage = session?.user?.image;
   return (
     <div className="flex flex-col gap-2 w-full md:h-[calc(100vh-80px)]">
-      <div className="flex items-center gap-4 bg-white rounded-md md:border p-3">
-        <Avatar>
-          <AvatarImage src={userImage as string} />
-          <AvatarFallback className=" text-primary">
-            {userName?.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <p className="text-xs font-medium">Hello,</p>
-          <p className="text-base font-medium">{userName}</p>
-        </div>
-      </div>
+      <UserInfo userId={session?.user?.id} />
       <div className="flex flex-col items-start justify-between mx-auto w-full bg-white rounded-md md:border px-1 pt-2 md:pt-3 pb-2 md:h-full">
         <div className="grid grid-cols-3 md:flex md:flex-col justify-between gap-2 w-full">
           <Link

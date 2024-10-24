@@ -1,9 +1,8 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { auth, signIn, signOut } from "../../../auth";
+import { auth } from "../../../auth";
 import { ArchiveRestore, CircleUser, Heart, Power } from "lucide-react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import LogoutButton from "../auth/logout-button";
+import AccountAvatar from "./account-avatar";
 
 const AccountDropdown = async () => {
   const session = await auth();
-  const userName = session?.user?.name;
-  const userImage = session?.user?.image;
   return (
     <span className="flex items-center gap-2">
       {!session?.user ? (
@@ -27,12 +25,7 @@ const AccountDropdown = async () => {
         <>
           <DropdownMenu>
             <DropdownMenuTrigger className="rounded-full">
-              <Avatar>
-                <AvatarImage src={userImage as string} />
-                <AvatarFallback className=" text-primary">
-                  {userName?.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <AccountAvatar userId={session?.user?.id} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
