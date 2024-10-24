@@ -4,6 +4,7 @@ import { IWishlistItem, wishlistItemSchema } from "./userWishlist";
 
 // Defining the structure of a user using TypeScript interfaces
 export interface IUser {
+  fullName: string;
   username: string;
   email: string;
   password: string;
@@ -27,6 +28,10 @@ export interface IUserDocument extends IUser, Document {
 // and constraints
 const userSchema = new mongoose.Schema<IUserDocument>(
   {
+    fullName: {
+      type: String,
+      required: true,
+    },
     username: {
       type: String,
       required: true,

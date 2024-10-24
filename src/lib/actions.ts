@@ -87,12 +87,13 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
   try {
     await connectToMongoDB();
 
-    const { username, email, password, picture } = values;
+    const { fullName, username, email, password, picture } = values;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
     const newUser = await User.create({
+      fullName,
       username,
       email,
       password: hash,
@@ -105,6 +106,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
       success: true,
       user: {
         _id: savedUser?._id?.toString(),
+        fullName: savedUser.fullName,
         username: savedUser.username,
         email: savedUser.email,
         picture: savedUser.picture,
