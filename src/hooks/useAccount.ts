@@ -10,7 +10,7 @@ export const fetchAccount = async () => {
 
 export function useAccount(userId: string | undefined) {
   return useQuery({
-    queryKey: ["account"],
+    queryKey: ["account", userId],
     queryFn: fetchAccount,
   });
 }

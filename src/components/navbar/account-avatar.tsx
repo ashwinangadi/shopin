@@ -4,8 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAccount } from "@/hooks/useAccount";
 
 const AccountAvatar = ({ userId }: { userId: string | undefined }) => {
-
-
   const { data: userAccount, isLoading } = useAccount(userId);
 
   return (
