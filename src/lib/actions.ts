@@ -160,23 +160,35 @@ export async function verifyEmail(token: string) {
 }
 
 // Function to delete a user
-export const deleteUser = async (id: FormData) => {
+export const deleteUser = async (id: string | undefined) => {
   await connectToMongoDB();
 
-  // Extracting user ID from formData
-  const userId = id.get("id");
-
   try {
-    // Deleting the user with the specified ID
-    await User.deleteOne({ _id: userId });
+    if (id === "671b4cf661c252de3b7855d8") {
+      return {
+        success: false,
+        error:
+          "You are not authorised to delete this account. Create your own account for better experience.",
+      };
+    }
 
-    // Triggering revalidation of the specified path ("/")
-    // revalidatePath("/signup");
+    if (!id) {
+      return { success: false, error: "User ID is required" };
+    }
 
-    // Returning a success message after deleting the user
-    return "user deleted";
-  } catch (error) {
-    return { message: "error deleting user" };
+    const deletedUser = await User.findByIdAndDelete({ _id: id });
+
+    if (!deletedUser) {
+      return { success: false, error: "User not found" };
+    }
+
+    return { success: true, message: "User deleted successfully!" };
+  } catch (error: any) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      error: "An error occurred while deleting the user",
+    };
   }
 };
 

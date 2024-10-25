@@ -37,8 +37,8 @@ const WishlistPage = ({ userId }: { userId: string | undefined }) => {
           !isError ? (
             dataLength > 0 ? (
               WishlistData?.data.data.map((item: any) => (
-                <>
-                  <div key={item.id} className="flex gap-2 h-full relative">
+                <span key={item.id}>
+                  <div className="flex gap-2 h-full relative">
                     <Image
                       src={item.thumbnail}
                       alt={item.title}
@@ -83,7 +83,7 @@ const WishlistPage = ({ userId }: { userId: string | undefined }) => {
                     />
                   </div>
                   <Separator className="w-full" />
-                </>
+                </span>
               ))
             ) : (
               <span className="flex flex-col items-center justify-center  mt-20">
