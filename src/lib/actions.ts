@@ -259,6 +259,88 @@ export async function resetPassword(token: string, newPassword?: string) {
   }
 }
 
+// Function to update user profile
+export async function updateUserProfile(
+  userId: string,
+  data: {
+    fullName?: string;
+    username?: string;
+    email?: string;
+  }
+) {
+  try {
+    await connectToMongoDB();
+
+    const updateData: { [key: string]: string } = {};
+    const validFields = ["fullName", "username", "email"];
+
+    for (const [key, value] of Object.entries(data)) {
+      if (validFields.includes(key) && value !== undefined) {
+        updateData[key] = value;
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return { success: false, error: "No valid fields to update" };
+    }
+
+    // If email is being updated, check if it already exists
+    if (updateData.email) {
+      const existingUser = await User.findOne({
+        email: updateData.email,
+        _id: { $ne: userId },
+      });
+      if (existingUser) {
+        return { success: false, error: "Email already in use" };
+      }
+    }
+
+    // If username is being updated, check if it already exists
+    if (updateData.username) {
+      const existingUser = await User.findOne({
+        username: updateData.username,
+        _id: { $ne: userId },
+      });
+      if (existingUser) {
+        return { success: false, error: "Username already in use" };
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return { success: false, error: "User not found" };
+    }
+
+    return {
+      success: true,
+      user: {
+        _id: updatedUser?._id?.toString(),
+        fullName: updatedUser?.fullName,
+        username: updatedUser?.username,
+        email: updatedUser?.email,
+        picture: updatedUser?.picture,
+        isVerified: updatedUser?.isVerified,
+        createdAt: updatedUser?.createdAt,
+        updatedAt: updatedUser?.updatedAt,
+      },
+    };
+  } catch (error: any) {
+    console.error("Error updating user profile:", error);
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map(
+        (err: any) => err.message
+      );
+      return { success: false, error: validationErrors };
+    }
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
 //____________________________________________________________________USER MANAGEMENT END___________________________________________________________________
 
 //____________________________________________________________________WISHLIST MANAGEMENT START______________________________________________________________________
@@ -301,6 +383,5 @@ export async function removeFromWishlist(userId: string, productId: number) {
     };
   }
 }
-
 
 //____________________________________________________________________WISHLIST MANAGEMENT END______________________________________________________________________
