@@ -1,6 +1,6 @@
 "use client";
 import { SelectSeparator } from "@/components/ui/select";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,22 +16,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { profileFormSchema } from "@/lib/zod";
+import { useAccount } from "@/hooks/useAccount";
 
-const ProfileForm = () => {
+const ProfileForm = ({ userId }: { userId: string | undefined }) => {
   const [isEditable, setIsEditable] = useState({
     fullName: false,
     username: false,
     email: false,
   });
 
+  const { data: userAccount, isLoading } = useAccount(userId);
+
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      fullName: "Ashwin Angadi",
-      username: "ashwin.angadi",
-      email: "ashwin.angadi1@gmail.com",
+      fullName: "",
+      username: "",
+      email: "",
     },
   });
+
+  useEffect(() => {
+    if (userAccount?.data) {
+      form.reset({
+        fullName: userAccount.data.fullName || "",
+        username: userAccount.data.username || "",
+        email: userAccount.data.email || "",
+      });
+    }
+  }, [userAccount, form]);
 
   function handleFieldSubmit(field: keyof typeof isEditable) {
     return (values: z.infer<typeof profileFormSchema>) => {
@@ -61,7 +74,14 @@ const ProfileForm = () => {
                   <Button
                     variant="outline"
                     type={"button"}
-                    onClick={() => toggleEdit("fullName")}
+                    onClick={() => {
+                      form.setValue(
+                        "fullName",
+                        userAccount?.data?.fullName || ""
+                      );
+                      form.clearErrors("fullName");
+                      toggleEdit("fullName");
+                    }}
                     className={`${!isEditable.fullName ? "hidden" : "block"}`}
                   >
                     Cancel
@@ -106,7 +126,14 @@ const ProfileForm = () => {
                   <Button
                     variant="outline"
                     type={"button"}
-                    onClick={() => toggleEdit("username")}
+                    onClick={() => {
+                      form.setValue(
+                        "username",
+                        userAccount?.data?.username || ""
+                      );
+                      form.clearErrors("username");
+                      toggleEdit("username");
+                    }}
                     className={`${!isEditable.username ? "hidden" : "block"}`}
                   >
                     Cancel
@@ -151,7 +178,11 @@ const ProfileForm = () => {
                   <Button
                     variant="outline"
                     type={"button"}
-                    onClick={() => toggleEdit("email")}
+                    onClick={() => {
+                      form.setValue("email", userAccount?.data?.email || "");
+                      form.clearErrors("email");
+                      toggleEdit("email");
+                    }}
                     className={`${!isEditable.email ? "hidden" : "block"}`}
                   >
                     Cancel
