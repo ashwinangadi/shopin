@@ -35,9 +35,19 @@ const ResetPassword = () => {
 
   const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
     try {
+      if (values?.email === "john@example.com") {
+        toast.error(
+          "You are not authorised to reset password for this account. Create your own account for better experience."
+        );
+        form.setError("root", {
+          type: "manual",
+          message: `Your are not authorised to reset password.`,
+        });
+        return;
+      }
       const user = await getUserInClient(values.email);
       if (!user) {
-        toast.error("User not found");
+        toast.error(user.error || "User not found");
       } else {
         const res = await axios.post("/api/mail", {
           email: user?.email,
@@ -53,13 +63,13 @@ const ResetPassword = () => {
         }, 4000);
       }
       // console.log(user);
-    } catch (error:any) {
+    } catch (error: any) {
       form.setError("root", {
         type: "manual",
         message: `${error.response.data.error}`,
       });
       toast.error("Failed to reset password");
-      throw error;
+      // throw error;
     }
   };
 
