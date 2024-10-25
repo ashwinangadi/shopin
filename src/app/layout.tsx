@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Provider from "@/providers/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import { connectToMongoDB } from "@/lib/db";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  connectToMongoDB();
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -10,8 +10,10 @@ export const signInSchema = object({
 });
 
 export const signUpSchema = object({
-  fullName: string({ required_error: "Full name is required" })
-    .min(1, "Full name is required"),
+  fullName: string({ required_error: "Full name is required" }).min(
+    1,
+    "Full name is required"
+  ),
   email: string({ required_error: "Email is required" })
     .min(1, "Email is required")
     .email("Invalid email"),
@@ -44,4 +46,14 @@ export const newPasswordSchema = object({
 }).refine((data: any) => data.newPassword === data.confirmNewPassword, {
   path: ["confirmNewPassword"], // Points to where the error will be displayed
   message: "Passwords must match",
+});
+
+export const profileFormSchema = object({
+  fullName: string().min(2, {
+    message: "Full name must be at least 2 characters.",
+  }),
+  username: string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  email: string().email({ message: "Please enter a valid email." }),
 });

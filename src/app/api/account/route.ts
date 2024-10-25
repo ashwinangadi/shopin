@@ -3,12 +3,11 @@ import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 
-connectToMongoDB();
-
 export async function GET() {
   const session = await auth();
   const userId = session?.user?.id;
   try {
+    await connectToMongoDB();
     const userAccount = await User.findById(userId).select(
       "-wishlist -verifyToken -verifyTokenExpiry -forgotPasswordToken -forgotPasswordTokenExpiry"
     );
