@@ -14,10 +14,10 @@ import { Product } from "@/types";
 import Link from "next/link";
 import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
-const ProductsPage = () => {
+const ProductsPage = ({ userId }: { userId: string | undefined }) => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy") || "title";
+  const sortBy = searchParams.get("sortBy") || "price";
   const orderBy = searchParams.get("order") || "asc";
   const searchQuery = searchParams.get("query");
   const limit = Number(searchParams.get("limit")) || LIMIT;
@@ -120,7 +120,9 @@ const ProductsPage = () => {
                 Filter
               </DrawerTrigger>
               <DrawerContent>
-                <Suspense fallback={<Loader className="w-5 h-5 animate-spin" />}>
+                <Suspense
+                  fallback={<Loader className="w-5 h-5 animate-spin" />}
+                >
                   <Filter data={data} />
                 </Suspense>
               </DrawerContent>
@@ -160,10 +162,12 @@ const ProductsPage = () => {
                       return (
                         <Link href={`/products/${item.id}`} key={item.id}>
                           <ProductCard
+                            userId={userId}
                             id={item.id}
                             thumbnail={item.thumbnail}
                             title={item.title}
                             brand={item.brand}
+                            stock={item.stock}
                             rating={item.rating}
                             price={item.price}
                             discountPercentage={item.discountPercentage}

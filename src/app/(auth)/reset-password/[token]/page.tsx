@@ -3,6 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { resetPassword } from "@/lib/actions";
 import Link from "next/link";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | Reset Password",
+  description: "Reset your password",
+};
 
 const NewPasswordPage = async ({ params }: { params: { token: string } }) => {
   const { token } = params;

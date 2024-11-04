@@ -1,6 +1,12 @@
 import VerifyEmail from "@/components/auth/verify-email";
 import { Loader } from "lucide-react";
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | Verify Email",
+  description: "Verify your email",
+};
 
 const VerifyEmailPage = () => {
   return (

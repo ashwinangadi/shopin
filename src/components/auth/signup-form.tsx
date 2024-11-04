@@ -29,6 +29,7 @@ export function SignupForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
+      fullName: "",
       username: "",
       email: "",
       password: "",
@@ -117,6 +118,26 @@ export function SignupForm() {
           )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="fullName"
+                        placeholder="Enter full name"
+                        autoComplete="off"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="username"
@@ -127,7 +148,7 @@ export function SignupForm() {
                       <Input
                         type="username"
                         placeholder="Enter username"
-                        autoComplete="on"
+                        autoComplete="off"
                         {...field}
                       />
                     </FormControl>
@@ -146,7 +167,7 @@ export function SignupForm() {
                       <Input
                         type="email"
                         placeholder="Enter your email address"
-                        autoComplete="on"
+                        autoComplete="off"
                         {...field}
                       />
                     </FormControl>

@@ -19,17 +19,20 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
 import { ArrowRight, Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { authenticate, githubAuthenticate, googleAuthenticate } from "@/lib/actions";
-import { useState } from "react";
+import {
+  authenticate,
+  githubAuthenticate,
+  googleAuthenticate,
+} from "@/lib/actions";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import AuthRouting from "./auth-routing";
-import { signIn } from "../../../auth";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  // console.log("searchParams________________",searchParams.get("callbackUrl"));
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -52,7 +55,7 @@ export function LoginForm() {
         toast.success("Login successful!");
       }
     } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
+      console.log(error);
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
@@ -61,8 +64,18 @@ export function LoginForm() {
     <div className="flex flex-col items-center justify-center min-h-screen m-1 gap-5">
       <span className="text-center text-sm bg-yellow-50 w-full p-4 border rounded-md">
         <p className="text-base font-bold mb-2">Dummy Credentials</p>
-        <p>email: john@example.com</p>
-        <p>password: password123</p>
+        <p
+          onClick={() => form.setValue("email", "john@example.com")}
+          className="cursor-pointer hover:underline"
+        >
+          email: john@example.com
+        </p>
+        <p
+          onClick={() => form.setValue("password", "password123")}
+          className="cursor-pointer hover:underline"
+        >
+          password: password123
+        </p>
         <p className="mt-2">
           <span className="font-bold">Note:</span>{" "}
           <Link href="/signup">
@@ -175,19 +188,21 @@ export function LoginForm() {
             />
             <Button
               variant={"outline"}
-              className="w-full mt-4"
+              className="w-full mt-4 flex items-center justify-center gap-3"
               onClick={() => googleAuthenticate()}
             >
               {" "}
-              Sign In with Google
+              <Image src="/google.png" alt="google" width={15} height={15} />
+              SignIn with Google
             </Button>
             <Button
               variant={"outline"}
-              className="w-full mt-4"
+              className="w-full mt-4 flex items-center justify-center gap-1"
               onClick={() => githubAuthenticate()}
             >
               {" "}
-              Sign In with Github
+              <GitHubLogoIcon className="h-4 w-4 mr-2" />
+              SignIn with Github
             </Button>
           </div>
         </CardContent>

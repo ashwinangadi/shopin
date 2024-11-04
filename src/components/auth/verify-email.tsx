@@ -49,7 +49,8 @@ const VerifyEmail = () => {
           </Card>
           {isSuccess ? (
             <p className="p-4 rounded-md border border-green-500 bg-green-200">
-              Email Verified Successfully. You will be redirected to products in {5} seconds.
+              Email Verified Successfully. You will be redirected to products in{" "}
+              {5} seconds.
             </p>
           ) : isError ? (
             <p className="p-4 rounded-md border border-red-500 bg-red-200">

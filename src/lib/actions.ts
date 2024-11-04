@@ -5,11 +5,13 @@ import { signIn } from "../../auth";
 import { signInSchema, signUpSchema } from "./zod";
 
 import User from "@/models/userModel";
-import { revalidatePath } from "next/cache";
 import { connectToMongoDB } from "./db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
+//____________________________________________________________________AUTHENTICATION START______________________________________________________________________
+
+// Function to authenticate a user
 export async function authenticate({
   params,
   values,
@@ -46,6 +48,7 @@ export async function authenticate({
   }
 }
 
+// Function to authenticate a user with Google
 export async function googleAuthenticate(
   prevState?: string | undefined,
   formData?: FormData
@@ -60,6 +63,7 @@ export async function googleAuthenticate(
   }
 }
 
+// Function to authenticate a user with Github
 export async function githubAuthenticate(
   prevState?: string | undefined,
   formData?: FormData
@@ -74,17 +78,22 @@ export async function githubAuthenticate(
   }
 }
 
+//____________________________________________________________________AUTHENTICATION END______________________________________________________________________
+
+//____________________________________________________________________USER MANAGEMENT START___________________________________________________________________
+
 // Function to create a new user
 export const createUser = async (values: z.infer<typeof signUpSchema>) => {
   try {
     await connectToMongoDB();
 
-    const { username, email, password, picture } = values;
+    const { fullName, username, email, password, picture } = values;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
     const newUser = await User.create({
+      fullName,
       username,
       email,
       password: hash,
@@ -97,6 +106,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
       success: true,
       user: {
         _id: savedUser?._id?.toString(),
+        fullName: savedUser.fullName,
         username: savedUser.username,
         email: savedUser.email,
         picture: savedUser.picture,
@@ -125,6 +135,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
   }
 };
 
+// Function to verify a user's email
 export async function verifyEmail(token: string) {
   try {
     const user = await User.findOne({
@@ -149,26 +160,39 @@ export async function verifyEmail(token: string) {
 }
 
 // Function to delete a user
-export const deleteUser = async (id: FormData) => {
+export const deleteUser = async (id: string | undefined) => {
   await connectToMongoDB();
 
-  // Extracting user ID from formData
-  const userId = id.get("id");
-
   try {
-    // Deleting the user with the specified ID
-    await User.deleteOne({ _id: userId });
+    if (id === "671b4cf661c252de3b7855d8") {
+      return {
+        success: false,
+        error:
+          "You are not authorised to delete this account. Create your own account for better experience.",
+      };
+    }
 
-    // Triggering revalidation of the specified path ("/")
-    // revalidatePath("/signup");
+    if (!id) {
+      return { success: false, error: "User ID is required" };
+    }
 
-    // Returning a success message after deleting the user
-    return "user deleted";
-  } catch (error) {
-    return { message: "error deleting user" };
+    const deletedUser = await User.findByIdAndDelete({ _id: id });
+
+    if (!deletedUser) {
+      return { success: false, error: "User not found" };
+    }
+
+    return { success: true, message: "User deleted successfully!" };
+  } catch (error: any) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      error: "An error occurred while deleting the user",
+    };
   }
 };
 
+// Function to get a user by email
 export async function getUser(email: string): Promise<any | undefined> {
   try {
     const user = await User.findOne({ email });
@@ -184,6 +208,8 @@ export async function getUser(email: string): Promise<any | undefined> {
     throw new Error("Failed to fetch user.");
   }
 }
+
+// Function to get a user by email in the client
 export async function getUserInClient(email: string): Promise<any | undefined> {
   await connectToMongoDB();
   try {
@@ -201,6 +227,7 @@ export async function getUserInClient(email: string): Promise<any | undefined> {
   }
 }
 
+// Function to reset a user's password
 export async function resetPassword(token: string, newPassword?: string) {
   try {
     await connectToMongoDB();
@@ -231,3 +258,130 @@ export async function resetPassword(token: string, newPassword?: string) {
     return { error: error.message, status: 500 };
   }
 }
+
+// Function to update user profile
+export async function updateUserProfile(
+  userId: string,
+  data: {
+    fullName?: string;
+    username?: string;
+    email?: string;
+  }
+) {
+  try {
+    await connectToMongoDB();
+
+    const updateData: { [key: string]: string } = {};
+    const validFields = ["fullName", "username", "email"];
+
+    for (const [key, value] of Object.entries(data)) {
+      if (validFields.includes(key) && value !== undefined) {
+        updateData[key] = value;
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return { success: false, error: "No valid fields to update" };
+    }
+
+    // If email is being updated, check if it already exists
+    if (updateData.email) {
+      const existingUser = await User.findOne({
+        email: updateData.email,
+        _id: { $ne: userId },
+      });
+      if (existingUser) {
+        return { success: false, error: "Email already in use" };
+      }
+    }
+
+    // If username is being updated, check if it already exists
+    if (updateData.username) {
+      const existingUser = await User.findOne({
+        username: updateData.username,
+        _id: { $ne: userId },
+      });
+      if (existingUser) {
+        return { success: false, error: "Username already in use" };
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return { success: false, error: "User not found" };
+    }
+
+    return {
+      success: true,
+      user: {
+        _id: updatedUser?._id?.toString(),
+        fullName: updatedUser?.fullName,
+        username: updatedUser?.username,
+        email: updatedUser?.email,
+        picture: updatedUser?.picture,
+        isVerified: updatedUser?.isVerified,
+        createdAt: updatedUser?.createdAt,
+        updatedAt: updatedUser?.updatedAt,
+      },
+    };
+  } catch (error: any) {
+    console.error("Error updating user profile:", error);
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map(
+        (err: any) => err.message
+      );
+      return { success: false, error: validationErrors };
+    }
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+//____________________________________________________________________USER MANAGEMENT END___________________________________________________________________
+
+//____________________________________________________________________WISHLIST MANAGEMENT START______________________________________________________________________
+
+// Function to add a product to the user's wishlist
+export async function addToWishlist(userId: string, product: any) {
+  try {
+    await connectToMongoDB();
+
+    // Find the user by ID and update their wishlist
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $push: { wishlist: product } },
+      { new: true }
+    );
+
+    return { message: "Product added to wishlist", success: true };
+  } catch (error) {
+    return { message: "Failed to add product to wishlist", success: false };
+  }
+}
+
+// Function to remove a product from the user's wishlist
+export async function removeFromWishlist(userId: string, productId: number) {
+  try {
+    await connectToMongoDB();
+
+    // Find the user by ID and update their wishlist
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { wishlist: { id: productId } } },
+      { new: true }
+    );
+
+    return { message: "Product removed from wishlist", success: true };
+  } catch (error) {
+    return {
+      message: "Failed to remove product from wishlist",
+      success: false,
+    };
+  }
+}
+
+//____________________________________________________________________WISHLIST MANAGEMENT END______________________________________________________________________

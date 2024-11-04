@@ -2,20 +2,35 @@ import { ProductCardProps } from "@/types";
 import { Truck, UndoDot } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import AddToWishlist from "./add-to-wishlist";
 
 const ProductCard = ({
+  userId,
   id,
   thumbnail,
   title,
   brand,
+  stock,
   rating,
   price,
   discountPercentage,
   shippingInformation,
   returnPolicy,
 }: ProductCardProps) => {
+  const product = {
+    id,
+    title,
+    price,
+    thumbnail,
+    rating,
+    stock,
+  };
+
   return (
-    <div key={id} className="space-y-4 hover:shadow-lg w-full min-w-[200px]">
+    <div
+      key={id}
+      className="relative space-y-4 hover:shadow-lg w-full min-w-[200px]"
+    >
       <Image
         src={thumbnail}
         alt=""
@@ -23,6 +38,9 @@ const ProductCard = ({
         height={200}
         className="mx-auto"
       />
+
+      <AddToWishlist userId={userId} product={product} />
+
       <div className="p-3 space-y-2">
         <div className="flex flex-col -space-y-1">
           <p className="">
