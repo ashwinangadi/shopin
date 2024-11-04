@@ -9,10 +9,12 @@ const ProductCount = ({
 }: any) => {
   return (
     <div className="flex flex-row items-center gap-1 text-xs md:text-sm">
-      <p>
-        {skip + 1} -{skip + limit > data?.total ? data?.total : skip + limit} of{" "}
-        {data?.total} results{" "}
-      </p>
+      {data ? (
+        <p>
+          {skip + 1} -{skip + limit > data?.total ? data?.total : skip + limit}{" "}
+          of {data?.total} results{" "}
+        </p>
+      ) : null}
 
       <p className="flex gap-1">
         for

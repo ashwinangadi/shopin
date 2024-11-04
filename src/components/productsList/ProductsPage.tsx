@@ -3,7 +3,7 @@ import { getProducts, LIMIT } from "@/utils/api/api";
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import SortOrder from "./SortOrder";
 import ProductCard from "./ProductCard";
 import Filter from "./Filter";
@@ -14,10 +14,10 @@ import { Product } from "@/types";
 import Link from "next/link";
 import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
-const ProductsPage = () => {
+const ProductsPage = ({ userId }: { userId: string | undefined }) => {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-  const sortBy = searchParams.get("sortBy") || "title";
+  const sortBy = searchParams.get("sortBy") || "price";
   const orderBy = searchParams.get("order") || "asc";
   const searchQuery = searchParams.get("query");
   const limit = Number(searchParams.get("limit")) || LIMIT;
@@ -108,7 +108,9 @@ const ProductsPage = () => {
   return (
     <section className="grid md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] w-full max-w-[1680px] min-h-[calc(100vh-60px)] mx-auto pb-1 gap-1 px-1 ">
       <span className="hidden md:block">
-        <Filter data={data} />
+        <Suspense fallback={<Loader className="w-5 h-5 animate-spin" />}>
+          <Filter data={data} />
+        </Suspense>
       </span>
       <div className="flex-1 space-y-1 mt-2">
         <div className="flex justify-between items-center bg-white border rounded-md p-2">
@@ -118,7 +120,11 @@ const ProductsPage = () => {
                 Filter
               </DrawerTrigger>
               <DrawerContent>
-                <Filter data={data} />
+                <Suspense
+                  fallback={<Loader className="w-5 h-5 animate-spin" />}
+                >
+                  <Filter data={data} />
+                </Suspense>
               </DrawerContent>
             </Drawer>
           </div>
@@ -156,10 +162,12 @@ const ProductsPage = () => {
                       return (
                         <Link href={`/products/${item.id}`} key={item.id}>
                           <ProductCard
+                            userId={userId}
                             id={item.id}
                             thumbnail={item.thumbnail}
                             title={item.title}
                             brand={item.brand}
+                            stock={item.stock}
                             rating={item.rating}
                             price={item.price}
                             discountPercentage={item.discountPercentage}

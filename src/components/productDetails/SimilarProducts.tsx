@@ -3,18 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useMemo } from "react";
 import ProductCard from "../productsList/ProductCard";
-import { Loader } from "lucide-react";
 import { Product } from "@/types";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel";
 import ProductCardShimmer from "../shimmer/ProductCardShimmer";
 
-const SimilarProducts = ({ catagory, productId }: any) => {
+const SimilarProducts = ({ userId, catagory, productId }: any) => {
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["products", catagory],
     queryFn: () => getProducts({ category: catagory }),
@@ -22,7 +14,7 @@ const SimilarProducts = ({ catagory, productId }: any) => {
 
   const similarProducts = useMemo(
     () => data?.products?.filter((item: any) => +item.id !== +productId),
-    [data?.products]
+    [data?.products, productId]
   );
 
   return (
@@ -39,6 +31,7 @@ const SimilarProducts = ({ catagory, productId }: any) => {
                     return (
                       <Link href={`/products/${item.id}`} key={item.id}>
                         <ProductCard
+                          userId={userId}
                           id={item.id}
                           thumbnail={item.thumbnail}
                           title={item.title}
@@ -48,6 +41,7 @@ const SimilarProducts = ({ catagory, productId }: any) => {
                           discountPercentage={item.discountPercentage}
                           shippingInformation={item.shippingInformation}
                           returnPolicy={item.returnPolicy}
+                          stock={item.stock}
                         />
                       </Link>
                     );

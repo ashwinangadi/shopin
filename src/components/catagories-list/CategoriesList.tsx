@@ -16,8 +16,7 @@ import { urlParam } from "@/hooks/URL_Param";
 import { useSearchParams } from "next/navigation";
 
 const CategoriesList = () => {
-  const { data, isError, error, status, isLoading } =
-    useQuery(categoryListOptions);
+  const { data, isError, error, isLoading } = useQuery(categoryListOptions);
 
   const searchParams = useSearchParams();
   const sortBy = searchParams.get("sortBy") || "rating";
@@ -61,7 +60,7 @@ const CategoriesList = () => {
               })}
             </>
           ) : (
-            <p>{error.message}</p>
+            <p>{error?.message}</p>
           )
         ) : (
           <div className="col-span-full flex items-center justify-center w-full">

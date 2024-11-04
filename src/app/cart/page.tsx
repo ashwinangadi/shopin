@@ -1,7 +1,12 @@
 import CartPage from "@/components/cart/CartPage";
-import ProductDetailsPage from "@/components/productDetails/ProductDetailsPage";
 import { getQueryClient } from "@/providers/get-query-client";
-import { dehydrate, HydrationBoundary, useQuery } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | Cart",
+  description: "Manage your cart",
+};
 
 export default function ProductIdHome({
   params,

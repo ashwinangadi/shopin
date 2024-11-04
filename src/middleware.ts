@@ -1,22 +1,12 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
- 
-// This function can be marked `async` if using `await` inside
-
-export function middleware(req: any) {
-  const { pathname } = req.nextUrl;
-
-  // Check if the requested route is '/'
-  if (pathname === '/') {
-    // Redirect to '/products'
-    return NextResponse.redirect(new URL('/products', req.url));
-  }
-
-  // Allow other routes to proceed
-  return NextResponse.next();
-}
- 
-// See "Matching Paths" below to learn more
+export { auth as middleware } from "../auth";
 export const config = {
-  matcher: ['/'],
-}
+  runtime: "nodejs",
+  unstable_allowDynamic: [
+    "/node_modules/mongoose/**",
+    "mongoose/dist/browser.umd.js",
+    "/src/models/userModel.ts",
+    "/src/lib/db.ts",
+    "/src/lib/actions.ts",
+  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)"],
+};
