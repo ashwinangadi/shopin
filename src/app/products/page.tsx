@@ -5,6 +5,12 @@ import { auth } from "../../../auth";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | Products",
+  description: "Discover a wide range of products",
+};
 
 export default async function ProductHome() {
   const queryClient = getQueryClient();

@@ -1,5 +1,11 @@
 import { SelectSeparator } from "@/components/ui/select";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | My Orders",
+  description: "Manage your orders",
+};
 
 const OrdersPage = () => {
   return (

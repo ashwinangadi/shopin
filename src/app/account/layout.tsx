@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ShopIN | Account",
-  description: "Shopping Application built on Next.js",
+  description: "Manage your account",
 };
 
 export default function RootLayout({

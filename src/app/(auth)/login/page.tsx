@@ -3,6 +3,12 @@
 import { LoginForm } from "@/components/auth/login-form";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShopIN | Login",
+  description: "Login to your account",
+};
 
 export default function LoginPage() {
   return (
