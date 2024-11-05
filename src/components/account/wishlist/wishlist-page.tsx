@@ -24,7 +24,7 @@ const WishlistPage = ({ userId }: { userId: string | undefined }) => {
     enabled: !!userId,
   });
 
-  const dataLength = WishlistData?.data.data.length;
+  const dataLength = WishlistData?.data?.data?.length;
 
   return (
     <div className="flex flex-col gap-2 ">
