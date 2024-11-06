@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Slider } from "../ui/slider";
 import { Product, DataList } from "@/types";
 
@@ -20,8 +20,25 @@ const PriceSlider = ({ data }: { data: DataList }) => {
   const priceRangeMax = priceRange && Math.max(...priceRange);
   const priceRangeMin = priceRange && Math.min(...priceRange);
 
+  const [priceValues, setPriceValues] = useState<number[]>([0, 0]);
+
+  useEffect(() => {
+    if (urlParams.get("priceMin")) {
+      setPriceValues([
+        Number(urlParams.get("priceMin")),
+        Number(urlParams.get("priceMax")),
+      ]);
+    } else if (priceRangeMin && priceRangeMax) {
+      setPriceValues([priceRangeMin, priceRangeMax]);
+    }
+  }, [searchParams, priceRangeMin, priceRangeMax]);
+
+  const handleSliderChange = (values: number[]) => {
+    setPriceValues(values);
+  };
+
   const handleSliderCommit = (values: number[]) => {
-    const [priceMin, priceMax] = values; // Destructure the values array
+    const [priceMin, priceMax] = values;
     const params = new URLSearchParams(searchParams.toString());
 
     params.set("priceMin", priceMin.toString());
@@ -41,15 +58,9 @@ const PriceSlider = ({ data }: { data: DataList }) => {
             defaultValue={[priceRangeMin, priceRangeMax]}
             min={priceRangeMin}
             max={priceRangeMax}
-            value={
-              urlParams.get("priceMin")
-                ? [
-                    Number(urlParams.get("priceMin")),
-                    Number(urlParams.get("priceMax")),
-                  ]
-                : [priceRangeMin, priceRangeMax]
-            }
-            onValueChange={handleSliderCommit}
+            value={priceValues}
+            onValueChange={handleSliderChange}
+            onValueCommit={handleSliderCommit}
           />
           <span className="text-xs flex items-center justify-between mt-1">
             <p>{priceRangeMin}</p>

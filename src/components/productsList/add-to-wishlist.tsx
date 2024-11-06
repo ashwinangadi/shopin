@@ -35,17 +35,26 @@ const AddToWishlist = ({
 
     try {
       if (isInWishlist) {
-        const deletedProduct = await removeFromWishlist(userId, product.id);
-        if (deletedProduct.success) {
-          toast.success("Product deleted from wishlist");
-        }
+        const deletedProduct = removeFromWishlist(userId, product.id);
+        toast.promise(deletedProduct, {
+          loading: "Deleting product from wishlist...",
+          success: () => {
+            refetch();
+            return "Product deleted from wishlist";
+          },
+          error: "Failed to delete product from wishlist",
+        });
       } else {
-        const result = await addToWishlist(userId, product);
-        if (result.success) {
-          toast.success("Product added to wishlist");
-        }
+        const result = addToWishlist(userId, product);
+        toast.promise(result, {
+          loading: "Adding product to wishlist...",
+          success: () => {
+            refetch();
+            return "Product added to wishlist";
+          },
+          error: "Failed to add product to wishlist",
+        });
       }
-      refetch();
     } catch (error) {
       toast.error(`Some error occurred with wishlist: ${error}`);
       throw error;
