@@ -30,6 +30,7 @@ export async function authenticate({
   const redirectTo = params ?? "/products";
   const { email, password } = validatedFields.data;
   try {
+    await connectToMongoDB();
     await signIn("credentials", { email, password, redirectTo: redirectTo });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -54,6 +55,7 @@ export async function googleAuthenticate(
   formData?: FormData
 ) {
   try {
+    await connectToMongoDB();
     await signIn("google", { redirectTo: "/products" });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -69,6 +71,7 @@ export async function githubAuthenticate(
   formData?: FormData
 ) {
   try {
+    await connectToMongoDB();
     await signIn("github", { redirectTo: "/products" });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -138,6 +141,7 @@ export const createUser = async (values: z.infer<typeof signUpSchema>) => {
 // Function to verify a user's email
 export async function verifyEmail(token: string) {
   try {
+    await connectToMongoDB();
     const user = await User.findOne({
       verifyToken: token,
       verifyTokenExpiry: { $gt: Date.now() },
@@ -161,9 +165,9 @@ export async function verifyEmail(token: string) {
 
 // Function to delete a user
 export const deleteUser = async (id: string | undefined) => {
-  await connectToMongoDB();
-
+  
   try {
+    await connectToMongoDB();
     if (id === "671b4cf661c252de3b7855d8") {
       return {
         success: false,
@@ -195,6 +199,7 @@ export const deleteUser = async (id: string | undefined) => {
 // Function to get a user by email
 export async function getUser(email: string): Promise<any | undefined> {
   try {
+    await connectToMongoDB();
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -211,8 +216,8 @@ export async function getUser(email: string): Promise<any | undefined> {
 
 // Function to get a user by email in the client
 export async function getUserInClient(email: string): Promise<any | undefined> {
-  await connectToMongoDB();
   try {
+    await connectToMongoDB();
     const user = await User.findOne({ email });
 
     if (!user) {

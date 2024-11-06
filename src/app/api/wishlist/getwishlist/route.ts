@@ -2,12 +2,11 @@ import { connectToMongoDB } from "@/lib/db";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 
-connectToMongoDB();
-
 export async function POST(request: Request) {
   const reqBody = await request.json();
   const { userId } = reqBody;
   try {
+    await connectToMongoDB();
     const user = await User.findById(userId).select("wishlist");
     if (!user) {
       return NextResponse.json({
