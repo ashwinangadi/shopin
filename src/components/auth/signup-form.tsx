@@ -44,7 +44,7 @@ export function SignupForm() {
       if (result.success) {
         const user = result?.user!;
 
-        const res = axios.post("/api/mail", {
+        const res = axios.post("/api/mail1", {
           email: user?.email,
           emailType: "VERIFY",
           userId: user?._id,
@@ -58,8 +58,12 @@ export function SignupForm() {
             }, 4000);
             return `Account created successfully! Please check your email to verify your account, Redirecting to login page in 4 seconds...`;
           },
-          error:
-            "Account created successfully! Failed to send verification email.",
+          error: (error) => {
+            setTimeout(() => {
+              router.push("/login"); // Redirect to login page after 5 seconds
+            }, 4000);
+            return "Account created successfully! Failed to send verification email, Redirecting to login page in 4 seconds...";
+          },
         });
       } else {
         // Handle specific error cases
@@ -118,7 +122,6 @@ export function SignupForm() {
           )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-
               <FormField
                 control={form.control}
                 name="fullName"
