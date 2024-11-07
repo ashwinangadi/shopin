@@ -22,10 +22,16 @@ const ProductsPagination = ({ totalProduct }: { totalProduct: number }) => {
   const pathname = usePathname();
   const limit = LIMIT;
 
-  // Use useState instead of useRef
   const [skip, setSkip] = useState<number>(
     Number(searchParams.get("skip")) || 0
   );
+
+  const isFirstPage = skip === 0;
+  const isLastPage = skip + limit >= totalProduct;
+  const hasMultiplePages = totalProduct > limit;
+
+  // Skip rendering if there's only one page
+  if (!hasMultiplePages) return null;
 
   const totalPages = Math.ceil(totalProduct / limit);
   const totalPagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -65,11 +71,13 @@ const ProductsPagination = ({ totalProduct }: { totalProduct: number }) => {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={`#`}
+            href="#"
             onClick={(e) => {
               e.preventDefault();
               handlePreviousPage();
             }}
+            className={isFirstPage ? "pointer-events-none opacity-50" : ""}
+            aria-disabled={isFirstPage}
           />
         </PaginationItem>
         <Select
@@ -89,11 +97,13 @@ const ProductsPagination = ({ totalProduct }: { totalProduct: number }) => {
         </Select>
         <PaginationItem>
           <PaginationNext
-            href={`#`}
+            href="#"
             onClick={(e) => {
               e.preventDefault();
               handleNextPage();
             }}
+            className={isLastPage ? "pointer-events-none opacity-50" : ""}
+            aria-disabled={isLastPage}
           />
         </PaginationItem>
       </PaginationContent>
