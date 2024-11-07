@@ -194,8 +194,8 @@ const ProductsPage = ({ userId }: { userId: string | undefined }) => {
                 </p>
               )
             ) : (
-              <div className="col-span-full flex flex-wrap gap-5">
-                {Array(10)
+              <>
+                {Array(12)
                   .fill(null)
                   .map((item, index) => {
                     return (
@@ -204,10 +204,10 @@ const ProductsPage = ({ userId }: { userId: string | undefined }) => {
                       </div>
                     );
                   })}
-              </div>
+              </>
             )}
           </div>
-          {data?.total > 20 && (
+          {!isLoading && data?.total > 20 && (
             <ProductsPagination totalProduct={data?.total} />
           )}
         </div>

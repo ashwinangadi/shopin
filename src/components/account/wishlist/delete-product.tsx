@@ -23,11 +23,15 @@ const DeleteProduct = ({
     }
 
     try {
-      const deletedProduct = await removeFromWishlist(userId, productId);
-      if (deletedProduct.success) {
-        toast.success("Product deleted from wishlist");
-        refetch();
-      }
+      const deletedProduct = removeFromWishlist(userId, productId);
+      toast.promise(deletedProduct, {
+        loading: "Deleting product from wishlist...",
+        success: () => {
+          refetch();
+          return "Product deleted from wishlist";
+        },
+        error: "Failed to delete product from wishlist",
+      });
     } catch (error) {
       toast.error(`Some error occurred with wishlist: ${error}`);
       throw error;
