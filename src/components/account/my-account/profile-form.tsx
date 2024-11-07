@@ -29,8 +29,11 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
     email: false,
   });
 
-  const { data: userAccount, isLoading: userAccountLoading } =
-    useAccount(userId);
+  const {
+    data: userAccount,
+    isLoading: userAccountLoading,
+    refetch,
+  } = useAccount(userId);
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
@@ -52,6 +55,9 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
   }, [userAccount, form]);
 
   async function handleFieldSubmit(field: keyof typeof isEditable) {
+    // TODO: disable buttons while the request is being made
+    // TODO: data not updated in frontend immediately after updating in backend, verify account
+    // TODO: add password field 
     return async (values: z.infer<typeof profileFormSchema>) => {
       try {
         if (userId === "671b4cf661c252de3b7855d8") {
@@ -71,29 +77,45 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
         await fieldSchema.parseAsync({ [field]: values[field] });
 
         // Update the field in the database
-        const result = await updateUserProfile(userId!, {
+        const result = updateUserProfile(userId!, {
           [field]: values[field],
         });
 
-        if (result.success) {
-          console.log(`${field} updated successfully:`, values[field]);
-          toast.success(`${field} updated successfully`);
-          setIsEditable((prev) => ({ ...prev, [field]: false }));
-        } else {
-          console.error(`Error updating ${field}:`, result.error);
-          toast.error(
-            typeof result.error === "string"
-              ? result.error
-              : "An error occurred"
-          );
-          form.setError(field, {
-            type: "manual",
-            message:
-              typeof result.error === "string"
-                ? result.error
-                : "An error occurred",
-          });
-        }
+        toast.promise(result, {
+          loading: `Updating ${field}...`,
+          success: () => {
+            setIsEditable((prev) => ({ ...prev, [field]: false }));
+            refetch();
+            return `${field} updated successfully`;
+          },
+          error: (error) => {
+            form.setError(field, {
+              type: "manual",
+              message: typeof error === "string" ? error : "An error occurred",
+            });
+            return `Error updating ${field}: ${error}`;
+          }
+        });
+
+        // if (result.success) {
+        //   console.log(`${field} updated successfully:`, values[field]);
+        //   toast.success(`${field} updated successfully`);
+        //   setIsEditable((prev) => ({ ...prev, [field]: false }));
+        // } else {
+        //   console.error(`Error updating ${field}:`, result.error);
+        //   toast.error(
+        //     typeof result.error === "string"
+        //       ? result.error
+        //       : "An error occurred"
+        //   );
+        //   form.setError(field, {
+        //     type: "manual",
+        //     message:
+        //       typeof result.error === "string"
+        //         ? result.error
+        //         : "An error occurred",
+        //   });
+        // }
       } catch (error) {
         console.error(`Error updating ${field}:`, error);
         if (error instanceof ZodError) {
