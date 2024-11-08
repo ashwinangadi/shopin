@@ -21,6 +21,7 @@ import DeleteAccount from "./delete-account";
 import { updateUserProfile } from "@/lib/actions";
 import { toast } from "sonner";
 import { ZodError } from "zod";
+import ProfileResetPassword from "./profile-reset-password";
 
 const ProfileForm = ({ userId }: { userId: string | undefined }) => {
   const [isEditable, setIsEditable] = useState({
@@ -56,8 +57,6 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
 
   async function handleFieldSubmit(field: keyof typeof isEditable) {
     // TODO: disable buttons while the request is being made
-    // TODO: data not updated in frontend immediately after updating in backend, verify account
-    // TODO: add password field 
     return async (values: z.infer<typeof profileFormSchema>) => {
       try {
         if (userId === "671b4cf661c252de3b7855d8") {
@@ -94,7 +93,7 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
               message: typeof error === "string" ? error : "An error occurred",
             });
             return `Error updating ${field}: ${error}`;
-          }
+          },
         });
 
         // if (result.success) {
@@ -188,6 +187,9 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                         })();
                       } else {
                         toggleEdit("fullName");
+                        setTimeout(() => {
+                          form.setFocus("fullName");
+                        }, 0);
                       }
                     }}
                   >
@@ -200,6 +202,7 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                   placeholder="Full Name"
                   {...field}
                   disabled={!isEditable.fullName}
+                  autoFocus={isEditable.fullName}
                 />
               </FormControl>
               <FormMessage />
@@ -242,6 +245,9 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                         })();
                       } else {
                         toggleEdit("username");
+                        setTimeout(() => {
+                          form.setFocus("username");
+                        }, 0);
                       }
                     }}
                   >
@@ -254,6 +260,7 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                   placeholder="Username"
                   {...field}
                   disabled={!isEditable.username}
+                  autoFocus={isEditable.username}
                 />
               </FormControl>
               <FormMessage />
@@ -293,6 +300,9 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                         })();
                       } else {
                         toggleEdit("email");
+                        setTimeout(() => {
+                          form.setFocus("email");
+                        }, 0);
                       }
                     }}
                   >
@@ -305,11 +315,17 @@ const ProfileForm = ({ userId }: { userId: string | undefined }) => {
                   placeholder="Email"
                   {...field}
                   disabled={!isEditable.email}
+                  autoFocus={isEditable.email}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <ProfileResetPassword
+          userId={userAccount?.data?._id}
+          userEmail={userAccount?.data?.email}
         />
 
         <DeleteAccount userId={userId} />
