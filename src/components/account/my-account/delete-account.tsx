@@ -15,6 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 const DeleteAccount = ({ userId }: { userId: string | undefined }) => {
+  // TODO: Add loading state when request is being made
   async function handleDeleteAccount() {
     try {
       console.log("Attempting to delete account");

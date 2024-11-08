@@ -85,7 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const existingUser = await getUser(token?.email ?? "");
         if (!existingUser && token) {
           // If the user doesn't exist, create a new user
-          // TODO: Verification email not sent in this case
+          // TODO: Set isVerified to true if signup through OAuth
           const newUser = await createUser({
             fullName: token?.name ?? "",
             username: token?.email?.split("@")[0] ?? "", // Add a fallback empty string
