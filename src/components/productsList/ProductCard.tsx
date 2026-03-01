@@ -29,14 +29,14 @@ const ProductCard = ({
   return (
     <div
       key={id}
-      className="relative space-y-4 hover:shadow-lg w-full min-w-[200px]"
+      className="relative space-y-4 group hover:shadow-lg w-full min-w-[200px]"
     >
       <Image
         src={thumbnail}
         alt=""
         width={200}
         height={200}
-        className="mx-auto"
+        className="mx-auto group-hover:scale-110 transition-all duration-300"
       />
 
       <AddToWishlist userId={userId} product={product} />
