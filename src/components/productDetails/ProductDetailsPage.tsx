@@ -8,6 +8,7 @@ import SimilarProducts from "./SimilarProducts";
 import { Review } from "@/types";
 import { Button } from "../ui/button";
 import ProductDetailShimmer from "../shimmer/ProductDetailShimmer";
+import { Metadata } from "next";
 
 const ProductDetailsPage = ({
   userId,
@@ -21,6 +22,10 @@ const ProductDetailsPage = ({
     queryFn: () => getSingleProduct(productId),
   });
 
+  const metadata: Metadata = {
+    title: `ShopIN | ${data?.title}`,
+    description: data?.description,
+  };
   // const {title, brand, rating, price, discountPercentage, returnPolicy, shippingInformation} = data
   // console.log(data);
   return (
@@ -135,7 +140,11 @@ const ProductDetailsPage = ({
                     </div>
 
                     <p className="text-sm text-gray-500">
-                      Reviewed on {review.date.split("T")[0]}
+                      Reviewed on {new Date(review.date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: '2-digit'
+                      })}
                     </p>
 
                     <p className="text-md text-gray-800">{review.comment}</p>
@@ -158,7 +167,7 @@ const ProductDetailsPage = ({
           </div>
         ) : (
           <p className="col-span-full flex items-center  justify-center w-full">
-            {"asdf"}
+            {`${error.message}`}
           </p>
         )
       ) : (
@@ -166,7 +175,11 @@ const ProductDetailsPage = ({
           <ProductDetailShimmer />
         </div>
       )}
-      <SimilarProducts userId={userId} catagory={data?.category} productId={productId} />
+      <SimilarProducts
+        userId={userId}
+        catagory={data?.category}
+        productId={productId}
+      />
     </section>
   );
 };
